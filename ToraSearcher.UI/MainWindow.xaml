@@ -1,0 +1,124 @@
+﻿<Window x:Class="ToraSearcher.UI.MainWindow"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToraSearcher.UI"
+        xmlns:controls="clr-namespace:ToraSearcher.UI.Controls"        
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ToraSearcher.UI.ViewModels"
+        xmlns:adorners="http://gu.se/Adorners"
+        xmlns:entities="clr-namespace:ToraSearcher.Entities;assembly=ToraSearcher.Entities"
+        Title="בלבבי משכן אבנה" Height="350" Width="700"
+        FocusManager.FocusedElement="{Binding ElementName='searchTextBox'}" WindowState="Maximized">
+    <Window.Resources>
+        <vm:ViewModelLocator x:Key="locator"/>
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource locator}, Path=MainVM}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="43"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="201.667"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30.534"/>
+            <RowDefinition Height="30.466"/>
+            <RowDefinition/>
+            <RowDefinition Height="27"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.ColumnSpan="6" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" MinWidth="90"/>
+                <ColumnDefinition Width="235"/>
+                <ColumnDefinition Width="145"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar Margin="5" Value="{Binding Progress}" FlowDirection="RightToLeft" Grid.ColumnSpan="1"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,5" FlowDirection="RightToLeft">
+                <Button Content="חיפוש"   FlowDirection="RightToLeft" Command="{Binding SearchCommand, Mode=OneWay}" IsEnabled="{Binding SearchButtonEnabled}" Margin="5,0,0,0" Width="40"/>
+                <Button Content="נקה" Margin="5,0,0,0" Width="40"  Command="{Binding ClearCommand, Mode=OneWay}"/>
+            </StackPanel>
+            <TextBox x:Name="searchTextBox" Grid.Column="3" TextWrapping="Wrap" FlowDirection="RightToLeft" Margin="0,5,5,5" Text="{Binding SearchText}" IsEnabled="{Binding SearchTextEnabled}" InputLanguageManager.InputLanguage="he-IL" adorners:Watermark.Text="מילת חיפוש"/>
+            <TextBox x:Name="textBox"  FlowDirection="RightToLeft"  Grid.Column="2" Margin="0,5,5,5" TextWrapping="Wrap" adorners:Watermark.Text="מילים להתעלמות"  Text="{Binding IgnoreText}"/>
+
+        </Grid>
+        <ListView x:Name="listView" Grid.Row="2" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding SentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
+                    <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding Sentence.BookName}" />
+                    <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding Sentence.ChapterName}" />
+                    <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding Sentence.SentenceName}" />
+                    <GridViewColumn >
+                        <GridViewColumnHeader Content="" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <controls:HighlightTextBlock Text="{Binding Sentence.Text}" HighlightPhrases="{Binding Words}" HighlightBrush="Cyan" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Row="2" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleCombinationsGrid}" ItemsSource="{Binding CombinationsResultVM}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />
+                    <GridViewColumn Header="מילה" Width="100" DisplayMemberBinding="{Binding Word}" />
+                    <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding FirstSentenceBookName}" />
+                    <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding FirstSentenceChapterName}" />
+                    <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding FirstSentenceSentenceName}" />
+                    <GridViewColumn Width="60">
+                        <GridViewColumnHeader Content="" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <controls:HighlightTextBlock Text="{Binding FirstSentenceText}" HighlightPhrases="{Binding HighlightedWords}" HighlightBrush="Cyan" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Expander x:Name="expander" ExpandDirection="Right" Grid.Row="2" Grid.ColumnSpan="1" Grid.Column="6" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}" >
+            <Expander.Resources>
+                <clr:String x:Key="ExpanderHeader">ספרים</clr:String>
+                <DataTemplate x:Key="DataTemplate1" >
+                    <ItemsControl ItemsSource="{StaticResource ExpanderHeader}" VerticalAlignment="Center" FontSize="15"></ItemsControl>
+                </DataTemplate>
+            </Expander.Resources>
+            <TreeView Width="200" ItemsSource="{Binding BooksTreeVM}" FlowDirection="RightToLeft">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Books}" DataType="{x:Type vm:BookTreeNodeVM}" >
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Checked}" FlowDirection="RightToLeft">
+                                <TextBlock Text="{Binding BookName}" />
+                            </CheckBox>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+        </Expander>
+        <StackPanel Grid.Column="3" Orientation="Horizontal" Grid.Row="3" FlowDirection="RightToLeft" Grid.ColumnSpan="3">
+            <Label x:Name="label" Content="סה&quot;כ פסוקים:" HorizontalAlignment="Right" FlowDirection="RightToLeft" Padding="5,5,0,5"/>
+            <Label x:Name="label1" Content="{Binding TotalFound}" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
+        </StackPanel>
+        <Button x:Name="button" Content="רישוי" Margin="5,3" Grid.Row="3" Grid.Column="0" Click="button_Click"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1" Margin="0,5">
+            <RadioButton Content="על הסדר ללא דילוגים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.OrderedNoJump}}" />
+            <RadioButton Content="על הסדר בדילוגים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.OrderedJump}}"/>
+            <RadioButton Content="ללא סדר" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.NotOrdered}}"/>
+            <RadioButton Content="צירופים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, ConverterParameter={x:Static vm:SearchTypes.Combinations}, Converter={StaticResource EnumToBooleanConverter}}"/>
+        </StackPanel>
+    </Grid>
+</Window>
