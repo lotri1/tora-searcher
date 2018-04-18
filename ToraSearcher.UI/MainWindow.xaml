@@ -47,25 +47,66 @@
             <TextBox x:Name="textBox"  FlowDirection="RightToLeft"  Grid.Column="2" Margin="0,5,5,5" TextWrapping="Wrap" adorners:Watermark.Text="מילים להתעלמות"  Text="{Binding IgnoreText}"/>
 
         </Grid>
-        <ListView x:Name="listView" Grid.Row="2" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding SentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding Sentence.BookName}" />
-                    <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding Sentence.ChapterName}" />
-                    <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding Sentence.SentenceName}" />
-                    <GridViewColumn >
-                        <GridViewColumnHeader Content="" />
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <controls:HighlightTextBlock Text="{Binding Sentence.Text}" HighlightPhrases="{Binding Words}" HighlightBrush="Cyan" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <ListView Grid.Row="2" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleCombinationsGrid}" ItemsSource="{Binding CombinationsResultVM}">
+        <Grid Grid.Row="2" Grid.ColumnSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="listView" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding SentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding Sentence.BookName}" />
+                        <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding Sentence.ChapterName}" />
+                        <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding Sentence.SentenceName}" />
+                        <GridViewColumn >
+                            <GridViewColumnHeader Content="" />
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:HighlightTextBlock Text="{Binding Sentence.Text}" HighlightPhrases="{Binding Words}" HighlightBrush="Cyan" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Column="1" Width="100">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="מילים" FlowDirection="RightToLeft"></TextBlock>
+                <ListBox Grid.Row="1"/>
+            </Grid>
+            <Expander x:Name="expander" ExpandDirection="Right" Grid.Column="2" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}">
+                <Expander.Resources>
+                    <clr:String x:Key="ExpanderHeader">ספרים</clr:String>
+                    <DataTemplate x:Key="DataTemplate1" >
+                        <ItemsControl ItemsSource="{StaticResource ExpanderHeader}" VerticalAlignment="Center" FontSize="15"></ItemsControl>
+                    </DataTemplate>
+                </Expander.Resources>
+                <TreeView Width="200" ItemsSource="{Binding BooksTreeVM}" FlowDirection="RightToLeft">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="True" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Books}" DataType="{x:Type vm:BookTreeNodeVM}" >
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Checked}" FlowDirection="RightToLeft">
+                                    <TextBlock Text="{Binding BookName}" />
+                                </CheckBox>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+            </Expander>
+        </Grid>
+        <!--{Binding IsVisibleCombinationsGrid}-->
+        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="Collapsed" ItemsSource="{Binding CombinationsResultVM}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />
@@ -84,31 +125,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Expander x:Name="expander" ExpandDirection="Right" Grid.Row="2" Grid.ColumnSpan="1" Grid.Column="6" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}" >
-            <Expander.Resources>
-                <clr:String x:Key="ExpanderHeader">ספרים</clr:String>
-                <DataTemplate x:Key="DataTemplate1" >
-                    <ItemsControl ItemsSource="{StaticResource ExpanderHeader}" VerticalAlignment="Center" FontSize="15"></ItemsControl>
-                </DataTemplate>
-            </Expander.Resources>
-            <TreeView Width="200" ItemsSource="{Binding BooksTreeVM}" FlowDirection="RightToLeft">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="True" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Books}" DataType="{x:Type vm:BookTreeNodeVM}" >
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Checked}" FlowDirection="RightToLeft">
-                                <TextBlock Text="{Binding BookName}" />
-                            </CheckBox>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-
-        </Expander>
         <StackPanel Grid.Column="3" Orientation="Horizontal" Grid.Row="3" FlowDirection="RightToLeft" Grid.ColumnSpan="3">
             <Label x:Name="label" Content="סה&quot;כ פסוקים:" HorizontalAlignment="Right" FlowDirection="RightToLeft" Padding="5,5,0,5"/>
             <Label x:Name="label1" Content="{Binding TotalFound}" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
