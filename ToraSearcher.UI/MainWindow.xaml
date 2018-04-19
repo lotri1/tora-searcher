@@ -13,7 +13,7 @@
         Title="בלבבי משכן אבנה" Height="350" Width="700"
         FocusManager.FocusedElement="{Binding ElementName='searchTextBox'}" WindowState="Maximized">
     <Window.Resources>
-        <vm:ViewModelLocator x:Key="locator"/>            
+        <vm:ViewModelLocator x:Key="locator"/> 
     </Window.Resources>
     <Grid DataContext="{Binding Source={StaticResource locator}, Path=MainVM}">
         <Grid.ColumnDefinitions>
