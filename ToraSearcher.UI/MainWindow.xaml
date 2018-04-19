@@ -13,7 +13,7 @@
         Title="בלבבי משכן אבנה" Height="350" Width="700"
         FocusManager.FocusedElement="{Binding ElementName='searchTextBox'}" WindowState="Maximized">
     <Window.Resources>
-        <vm:ViewModelLocator x:Key="locator"/>
+        <vm:ViewModelLocator x:Key="locator"/>            
     </Window.Resources>
     <Grid DataContext="{Binding Source={StaticResource locator}, Path=MainVM}">
         <Grid.ColumnDefinitions>
@@ -53,7 +53,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="listView" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding SentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
+            <ListView x:Name="listView" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding FilteredSentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
@@ -71,22 +71,30 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Grid Grid.Column="1" Width="100">
+            <Grid Grid.Column="1" Width="120">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="22"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="מילים" FlowDirection="RightToLeft"></TextBlock>
-                <ListBox Grid.Row="1"/>
+                <!--<TextBlock Grid.Row="0" Text="מילים שנמצאו" FlowDirection="RightToLeft"></TextBlock>-->
+                <ListBox Grid.Row="1" Style="{DynamicResource FoundWordsListBoxStyle}" ItemsSource="{Binding WordsVM}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedWord}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                                <TextBlock Text="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
-            <Expander x:Name="expander" ExpandDirection="Right" Grid.Column="2" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}">
+            <Expander x:Name="expander" ExpandDirection="Right" Grid.Column="2" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}"  Margin="0,22,0,0" Background="{DynamicResource BooksTreeViewStyleBackground}" Style="{DynamicResource ExpanderStyle1}">
                 <Expander.Resources>
-                    <clr:String x:Key="ExpanderHeader">ספרים</clr:String>
+                    <!--<clr:String x:Key="ExpanderHeader"></clr:String>-->
                     <DataTemplate x:Key="DataTemplate1" >
-                        <ItemsControl ItemsSource="{StaticResource ExpanderHeader}" VerticalAlignment="Center" FontSize="15"></ItemsControl>
+                        <ItemsControl VerticalAlignment="Center" FontSize="15"></ItemsControl>
                     </DataTemplate>
                 </Expander.Resources>
-                <TreeView Width="200" ItemsSource="{Binding BooksTreeVM}" FlowDirection="RightToLeft">
+                <TreeView Width="200" ItemsSource="{Binding BooksTreeVM}" FlowDirection="RightToLeft" Style="{DynamicResource BooksTreeViewStyle}" >
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <Setter Property="IsExpanded" Value="True" />
@@ -105,8 +113,7 @@
 
             </Expander>
         </Grid>
-        <!--{Binding IsVisibleCombinationsGrid}-->
-        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="Collapsed" ItemsSource="{Binding CombinationsResultVM}">
+        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleCombinationsGrid}" ItemsSource="{Binding CombinationsResultVM}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />

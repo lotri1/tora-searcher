@@ -6,7 +6,12 @@
              xmlns:properties="clr-namespace:ToraSearcher.UI.Properties"
              StartupUri="MainWindow.xaml" Exit="Application_Exit">
     <Application.Resources>
-        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
-        <properties:Settings x:Key="Settings" />
+        <ResourceDictionary>
+            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <properties:Settings x:Key="Settings" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TemplatesResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

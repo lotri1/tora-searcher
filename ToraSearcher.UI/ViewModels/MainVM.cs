@@ -24,13 +24,17 @@ namespace ToraSearcher.UI.ViewModels
 
     public class MainVM : ViewModelBase
     {
-        //List<Sentence> sentencesList = new List<Sentence>();
         Dictionary<string, List<Sentence>> booksDict = new Dictionary<string, List<Sentence>>();
         private readonly List<BookTreeNode> booksTree = new List<BookTreeNode>();
 
         public RelayCommand SearchCommand { get; private set; }
         public RelayCommand ClearCommand { get; private set; }
-        public ObservableCollection<SentenceResultVM> SentenceResultVM { get; } = new ObservableCollection<SentenceResultVM>();
+
+        private readonly List<SentenceResultVM> _allSentenceResultVM = new List<SentenceResultVM>();
+        public ObservableCollection<SentenceResultVM> FilteredSentenceResultVM { get; } = new ObservableCollection<SentenceResultVM>();
+
+        public ObservableCollection<string> WordsVM { get; set; } = new ObservableCollection<string>();
+        private readonly HashSet<string> wordsFound = new HashSet<string>();
         public ObservableCollection<CombinationsResultVM> CombinationsResultVM { get; } = new ObservableCollection<CombinationsResultVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeVM { get; } = new ObservableCollection<BookTreeNodeVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeLeafsVM { get; } = new ObservableCollection<BookTreeNodeVM>();
@@ -161,6 +165,30 @@ namespace ToraSearcher.UI.ViewModels
             }
         }
 
+        private string _selectedWord;
+        public string SelectedWord
+        {
+            get { return _selectedWord; }
+            set
+            {
+                if (value == _selectedWord)
+                    return;
+
+                _selectedWord = value;
+                RaisePropertyChanged(() => SelectedWord);
+
+                FilteredSentenceResultVM.Clear();
+
+                if (_selectedWord == "----הכל----")
+                {
+                    _allSentenceResultVM.ForEach(FilteredSentenceResultVM.Add);
+                }
+                else
+                {
+                    _allSentenceResultVM.Where(x => x.Words.Contains(_selectedWord)).ToList().ForEach(FilteredSentenceResultVM.Add);
+                }
+            }
+        }
 
         public MainVM()
         {
@@ -194,7 +222,14 @@ namespace ToraSearcher.UI.ViewModels
             SearchTextEnabled = false;
 
             Progress = 0;
-            SentenceResultVM.Clear();
+
+            FilteredSentenceResultVM.Clear();
+            _allSentenceResultVM.Clear();
+
+            WordsVM.Clear();
+            WordsVM.Add("----הכל----");
+
+            wordsFound.Clear();
 
             var searchText = SearchText.ToCharArray();
             var ignoreTextArr = IgnoreText?.Split(' ');
@@ -228,18 +263,25 @@ namespace ToraSearcher.UI.ViewModels
                         if (searchFunction(word))
                         {
                             foundWords.Add(word);
+                            wordsFound.Add(word);
                         }
                     }
 
                     if (foundWords.Count > 0)
                     {
+                        var sentenceVM = new SentenceResultVM
+                        {
+                            Sentence = sentence,
+                            Id = TotalFound,
+                            Words = new ObservableCollection<string>(foundWords)
+                        };
+
+                        _allSentenceResultVM.Add(sentenceVM);
+
                         _uiContext.Send(state =>
-                                SentenceResultVM.Add(new SentenceResultVM
-                                {
-                                    Sentence = sentence,
-                                    Id = TotalFound,
-                                    Words = new ObservableCollection<string>(foundWords)
-                                }), null);
+                        {
+                            FilteredSentenceResultVM.Add(sentenceVM);
+                        }, null);
 
                         ++TotalFound;
                     }
@@ -256,7 +298,11 @@ namespace ToraSearcher.UI.ViewModels
                 SearchButtonEnabled = true;
                 SearchTextEnabled = true;
                 Progress = 0;
+
+
             });
+
+            wordsFound.OrderBy(x => x).ToList().ForEach(WordsVM.Add);
         }
 
         private async void GenerateCombinations()
@@ -423,8 +469,10 @@ namespace ToraSearcher.UI.ViewModels
         private void Clear()
         {
             SearchText = "";
-            SentenceResultVM.Clear();
+            FilteredSentenceResultVM.Clear();
+            _allSentenceResultVM.Clear();
             CombinationsResultVM.Clear();
+            WordsVM.Clear();
             Progress = 0;
             TotalFound = 0;
         }
