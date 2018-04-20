@@ -208,6 +208,8 @@ namespace ToraSearcher.UI.ViewModels
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
 
+            ClearFoundWords();
+
             LoadBooks();
         }
 
@@ -226,8 +228,7 @@ namespace ToraSearcher.UI.ViewModels
             FilteredSentenceResultVM.Clear();
             _allSentenceResultVM.Clear();
 
-            WordsVM.Clear();
-            WordsVM.Add("----הכל----");
+            ClearFoundWords();
 
             wordsFound.Clear();
 
@@ -472,9 +473,16 @@ namespace ToraSearcher.UI.ViewModels
             FilteredSentenceResultVM.Clear();
             _allSentenceResultVM.Clear();
             CombinationsResultVM.Clear();
-            WordsVM.Clear();
+            ClearFoundWords();
             Progress = 0;
             TotalFound = 0;
+        }
+
+        private void ClearFoundWords()
+        {
+            WordsVM.Clear();
+            WordsVM.Add("----הכל----");
+            SelectedWord = WordsVM[0];
         }
     }
 }

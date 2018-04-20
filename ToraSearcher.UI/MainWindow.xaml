@@ -87,7 +87,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Expander x:Name="expander" ExpandDirection="Right" Grid.Column="2" IsExpanded="False" HeaderTemplate="{DynamicResource DataTemplate1}"  Margin="0,22,0,0" Background="{DynamicResource BooksTreeViewStyleBackground}" Style="{DynamicResource ExpanderStyle1}">
+            <Expander x:Name="expander" ExpandDirection="Right" Grid.Column="2" IsExpanded="True" HeaderTemplate="{DynamicResource DataTemplate1}"  Margin="0,22,0,0" Background="{DynamicResource BooksTreeViewStyleBackground}" Style="{DynamicResource ExpanderStyle1}">
                 <Expander.Resources>
                     <!--<clr:String x:Key="ExpanderHeader"></clr:String>-->
                     <DataTemplate x:Key="DataTemplate1" >
