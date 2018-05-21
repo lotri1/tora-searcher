@@ -32,9 +32,14 @@ namespace ToraSearcher.DBCreator
 
             using (var db = new LiteDatabase(@"tora-searcher.db"))
             {
+                var engine = db.Engine;
+                engine.DropCollection("sentences");
+                engine.DropCollection("books");                
+                
                 var col = db.GetCollection<Sentence>("sentences");
+                col.EnsureIndex(x => x.Words);
 
-                col.Delete(Query.All());
+                //col.Delete(Query.All());
 
                 string[] files = Directory.GetFiles("books", "*.txt", SearchOption.AllDirectories);
 
@@ -45,7 +50,7 @@ namespace ToraSearcher.DBCreator
                 }
 
                 var booksCol = db.GetCollection<BookTreeNode>("books");
-                booksCol.Delete(Query.All());
+                //booksCol.Delete(Query.All());
 
                 var booksJson = File.ReadAllText("books.json");
                 var books = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookTreeNode>>(booksJson);
