@@ -92,67 +92,127 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="books\Neviyim\b06_Joshua.txt">
+    <Content Include="books\GmaraBavli\01_Bav BRAHOT_L1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b07_Judges.txt">
+    <Content Include="books\GmaraBavli\02_Bav SHABAT_L1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b08_Samuel_1.txt">
+    <Content Include="books\Tanach\Ktuvim\b27_Psalms.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b09_Samuel_2.txt">
+    <Content Include="books\Tanach\Ktuvim\b28_Proverbs.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b10_Kings_1.txt">
+    <Content Include="books\Tanach\Ktuvim\b29_Job.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b11_Kings_2.txt">
+    <Content Include="books\Tanach\Ktuvim\b30_Song_of_Songs.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b12_Isaiah.txt">
+    <Content Include="books\Tanach\Ktuvim\b31_Ruth.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b13_Jeremiah.txt">
+    <Content Include="books\Tanach\Ktuvim\b32_Lamentations.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b14_Ezekiel.txt">
+    <Content Include="books\Tanach\Ktuvim\b33_Ecclesiastes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b15_Hosea.txt">
+    <Content Include="books\Tanach\Ktuvim\b34_Esther.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b16_Joel.txt">
+    <Content Include="books\Tanach\Ktuvim\b35_Daniel.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b17_Amos.txt">
+    <Content Include="books\Tanach\Ktuvim\b36_Ezra.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b18_Obadiah.txt">
+    <Content Include="books\Tanach\Ktuvim\b37_Nehemiah.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b19_Jonah.txt">
+    <Content Include="books\Tanach\Ktuvim\b38_Chronicles_1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b20_Micah.txt">
+    <Content Include="books\Tanach\Ktuvim\b39_Chronicles_2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b21_Nahum.txt">
+    <Content Include="books\Tanach\Neviyim\b06_Joshua.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b22_Habakkuk.txt">
+    <Content Include="books\Tanach\Neviyim\b07_Judges.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b23_Zephaniah.txt">
+    <Content Include="books\Tanach\Neviyim\b08_Samuel_1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b24_Haggai.txt">
+    <Content Include="books\Tanach\Neviyim\b09_Samuel_2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b25_Zechariah.txt">
+    <Content Include="books\Tanach\Neviyim\b10_Kings_1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="books\Neviyim\b26_Malachi.txt">
+    <Content Include="books\Tanach\Neviyim\b11_Kings_2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b12_Isaiah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b13_Jeremiah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b14_Ezekiel.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b15_Hosea.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b16_Joel.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b17_Amos.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b18_Obadiah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b19_Jonah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b20_Micah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b21_Nahum.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b22_Habakkuk.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b23_Zephaniah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b24_Haggai.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b25_Zechariah.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Neviyim\b26_Malachi.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Tora\b01_Genesis.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Tora\b02_Exodus.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Tora\b03_Leviticus.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Tora\b04_Numbers.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="books\Tanach\Tora\b05_Deuteronomy.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -179,62 +239,6 @@
       <Project>{7e6b5b7f-4f38-4480-b5bb-e73d7418c371}</Project>
       <Name>ToraSearcher.Entities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="books\b01_Genesis.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\b02_Exodus.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\b03_Leviticus.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\b04_Numbers.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\b05_Deuteronomy.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b27_Psalms.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b28_Proverbs.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b29_Job.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b30_Song_of_Songs.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b31_Ruth.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b32_Lamentations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b33_Ecclesiastes.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b34_Esther.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b35_Daniel.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b36_Ezra.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b37_Nehemiah.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b38_Chronicles_1.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="books\Ktuvim\b39_Chronicles_2.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
