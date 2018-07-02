@@ -1,5 +1,3 @@
-&UniqueId=844&LastLevelIndex=2&ForcedBookName=גמרא&GroupId=shabat&TextSource=ר' פנחס ראובן שליט''א&CosmeticsType==841&PutNewLinesAsIs=0&SearchInTitles=0
-
 $ תלמוד בבלי - שבת
 
 ^ פרק ראשון - יציאות השבת

@@ -1,6 +1,3 @@
-&UniqueId=841&LastLevelIndex=2&ForcedBookName=גמרא&GroupId=brahot&TextSource=ר' פנחס ראובן שליט''א&CosmeticsType=#bp=<span style='line-height:120%'>#sil=5#bs2=25#bs5=20#pr2=<hr><BR>#pr5=<hr><BR>#su2=<br>#su5=<br>#cp2=<small><p>#cs2=</small>#rlp={#rls=}#rnp=<b>{#rns=}</b>#MIX1=32,32,32#rep2=[[=<b  style='color:MIX1; font-size:120%;'>^^]]=</b>#rep3= ??x=<!-->&PutNewLinesAsIs=0&SearchInTitles=0
-// C:\Dev\BhOCR\Runtime files\Projects\Bav BRAHOT Layer 1 - 125 pages
-
 $ תלמוד בבלי - ברכות
 
 ^ פרק ראשון - מאימתי
