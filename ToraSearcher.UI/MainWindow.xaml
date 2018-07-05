@@ -57,9 +57,9 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
-                        <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding Sentence.BookName}" />
-                        <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding Sentence.ChapterName}" />
-                        <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding Sentence.SentenceName}" />
+                        <GridViewColumn Header="ספר" Width="120" DisplayMemberBinding="{Binding Sentence.BookName}" />
+                        <GridViewColumn Header="פרק" Width="160" DisplayMemberBinding="{Binding Sentence.ChapterName}" />
+                        <GridViewColumn Header="פסוק / דף" Width="60" DisplayMemberBinding="{Binding Sentence.SentenceName}" />
                         <GridViewColumn >
                             <GridViewColumnHeader Content="" />
                             <GridViewColumn.CellTemplate>
@@ -116,9 +116,9 @@
                 <GridView>
                     <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />
                     <GridViewColumn Header="מילה" Width="100" DisplayMemberBinding="{Binding Word}" />
-                    <GridViewColumn Header="ספר" Width="80" DisplayMemberBinding="{Binding FirstSentenceBookName}" />
-                    <GridViewColumn Header="פרק" Width="60" DisplayMemberBinding="{Binding FirstSentenceChapterName}" />
-                    <GridViewColumn Header="פסוק" Width="60" DisplayMemberBinding="{Binding FirstSentenceSentenceName}" />
+                    <GridViewColumn Header="ספר" Width="120" DisplayMemberBinding="{Binding FirstSentenceBookName}" />
+                    <GridViewColumn Header="פרק" Width="160" DisplayMemberBinding="{Binding FirstSentenceChapterName}" />
+                    <GridViewColumn Header="פסוק / דף" Width="60" DisplayMemberBinding="{Binding FirstSentenceSentenceName}" />
                     <GridViewColumn Width="60">
                         <GridViewColumnHeader Content="" />
                         <GridViewColumn.CellTemplate>
