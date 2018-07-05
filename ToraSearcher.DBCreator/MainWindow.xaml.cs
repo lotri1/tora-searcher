@@ -18,10 +18,11 @@ namespace ToraSearcher.DBCreator
         private readonly Regex wordRegex = new Regex(@"([א-ת]+)[\s:]");
         private readonly Regex chapterRegex = new Regex(@"~ ([\u05D0-\u05EA\s]+)פרק-([\u05D0-\u05EA]+)");
         //תלמוד בבלי - 
-        private readonly Regex gmaraBookName = new Regex(@"(?:^[\s\S]*\$ תלמוד בבלי - )((?:[א-ת]+\s)+)");
+        private readonly Regex gmaraBookName = new Regex(@"(?:^[\s\S]*\$ תלמוד בבלי - )((?:[א-ת]+\s*)+)");
         private readonly Regex gmaraChapter = new Regex(@"(?:\^ )((?:[א-ת]+[\s-]*)+)");
         private readonly Regex gmaraSentenceName = new Regex(@"(?:~ דף )([א-ת]{1,3}) - ([אב])");
-        private readonly Regex gmaraSentence = new Regex(@"((?:[א-ת']+[\s:])+['א-ת]+)", RegexOptions.Multiline);
+        private readonly Regex gmaraSentence = new Regex(@"(?:([א-ת'{-]+)}?[:.]?\s+)+", RegexOptions.Multiline);
+        private readonly Regex gmaraWord = new Regex(@"[\(\[]?([א-ת']+)[:.)\]\s]?(?![^{]*})");
 
         private readonly ObservableCollection<LoadedBookDetails> loadedBooks = new ObservableCollection<LoadedBookDetails>();
 
@@ -44,13 +45,13 @@ namespace ToraSearcher.DBCreator
 
                 var col = db.GetCollection<Sentence>("sentences");
 
-                //string[] tanachFiles = Directory.GetFiles(@"books\tanach", "*.txt", SearchOption.AllDirectories);
+                string[] tanachFiles = Directory.GetFiles(@"books\tanach", "*.txt", SearchOption.AllDirectories);
 
-                //foreach (var file in tanachFiles)
-                //{
-                //    var sentences = GetBookSentences(file);
-                //    col.Insert(sentences);
-                //}
+                foreach (var file in tanachFiles)
+                {
+                    var sentences = GetBookSentences(file);
+                    col.Insert(sentences);
+                }
 
                 string[] gmaraFiles = Directory.GetFiles(@"books\gmaraBavli", "*.txt", SearchOption.AllDirectories);
 
@@ -146,16 +147,20 @@ namespace ToraSearcher.DBCreator
             var sentenceCount = 0;
             var chapterCount = 0;
             var sentencePerChapterCount = 0;
-
-            var bookNameMatch = gmaraBookName.Match(text);
-
-            if (bookNameMatch.Success && bookNameMatch.Groups.Count > 1)
-            {
-                bookName = bookNameMatch.Groups[1].Value;
-            }
+            var createNewSentence = false;
+            Sentence currentSentence = null;
 
             foreach (var line in textLines)
             {
+                var bookNameMatch = gmaraBookName.Match(line);
+
+                if (bookNameMatch.Success && bookNameMatch.Groups.Count > 1)
+                {
+                    bookName = bookNameMatch.Groups[1].Value;
+                    createNewSentence = true;
+                    continue;
+                }
+
                 var chapterMatch = gmaraChapter.Match(line);
 
                 if (chapterMatch.Success)
@@ -164,6 +169,7 @@ namespace ToraSearcher.DBCreator
                     Debug.WriteLine($"{sentencePerChapterCount} sentences in {bookName} - {chapterName}");
                     sentencePerChapterCount = 0;
                     chapterName = chapterMatch.Groups[1].Value;
+                    createNewSentence = true;
                     continue;
                 }
 
@@ -172,6 +178,7 @@ namespace ToraSearcher.DBCreator
                 if (sentenceNameMatch.Success)
                 {
                     sentenceName = sentenceNameMatch.Groups[1].Value + (sentenceNameMatch.Groups[2].Value == "א" ? "." : ":");
+                    createNewSentence = true;
                     continue;
                 }
 
@@ -179,34 +186,47 @@ namespace ToraSearcher.DBCreator
 
                 if (sentenceMatch.Success)
                 {
-                    sentenceCount++;
                     sentencePerChapterCount++;
 
                     var words =
-                        wordRegex
+                        gmaraWord
                         .Matches(line)
                         .Cast<Match>()
                         .Select(x => x.Groups[1].Value)
                         .ToArray();
 
-                    var newSentence = new Sentence
+                    if (createNewSentence)
                     {
-                        Text = sentenceMatch.Groups[1].Value,
-                        SentenceName = sentenceName,
-                        ChapterName = chapterName,
-                        BookName = bookName,
-                        Words = words
-                    };
+                        sentenceCount++;
 
-                    yield return newSentence;
+                        if (currentSentence != null)
+                            yield return currentSentence;
+
+                        currentSentence = new Sentence
+                        {
+                            Text = null,
+                            SentenceName = sentenceName,
+                            ChapterName = chapterName,
+                            BookName = bookName,
+                            Words = words
+                        };
+
+                        createNewSentence = false;
+                    }
+                    else
+                    {
+                        currentSentence.Words = currentSentence.Words.Concat(words).ToArray();
+                    }
                 }
             }
 
-            //loadedBooks.Add(new LoadedBookDetails
-            //{
-            //    Name = bookName,
-            //    SentenceCount = sentenceCount
-            //});
+            yield return currentSentence;
+
+            loadedBooks.Add(new LoadedBookDetails
+            {
+                Name = bookName,
+                SentenceCount = sentenceCount
+            });
         }
     }
 }

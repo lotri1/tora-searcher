@@ -64,7 +64,7 @@
                             <GridViewColumnHeader Content="" />
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <controls:HighlightTextBlock Text="{Binding Sentence.Text}" HighlightPhrases="{Binding Words}" HighlightBrush="Cyan" />
+                                    <controls:HighlightTextBlock Text="{Binding Text}" HighlightPhrases="{Binding Words}" HighlightBrush="Cyan" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

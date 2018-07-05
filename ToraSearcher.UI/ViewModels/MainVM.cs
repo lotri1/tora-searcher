@@ -241,12 +241,13 @@ namespace ToraSearcher.UI.ViewModels
             await Task.Run(() =>
             {
                 var sentencesList = GetSentencesList();
-                var foundWords = new List<string>();
+                var foundWords = new Dictionary<int, string>();
                 var searchFunction = GetSearchFunction(SearchText, SearchType);
 
                 foreach (var sentence in sentencesList)
                 {
                     foundWords.Clear();
+                    var wordsIndex = 0;
 
                     foreach (var word in sentence.Words)
                     {
@@ -263,28 +264,59 @@ namespace ToraSearcher.UI.ViewModels
 
                         if (searchFunction(word))
                         {
-                            foundWords.Add(word);
+                            foundWords.Add(wordsIndex, word);
                             wordsFound.Add(word);
                         }
+
+                        wordsIndex++;
                     }
 
                     if (foundWords.Count > 0)
                     {
-                        var sentenceVM = new SentenceResultVM
+                        if (sentence.Text == null)
                         {
-                            Sentence = sentence,
-                            Id = TotalFound,
-                            Words = new ObservableCollection<string>(foundWords)
-                        };
+                            int foundWordIndex = 0;
 
-                        _allSentenceResultVM.Add(sentenceVM);
+                            foreach (var foundWord in foundWords)
+                            {
+                                var sentenceVM = new SentenceResultVM
+                                {
+                                    Sentence = sentence,
+                                    Id = TotalFound,
+                                    Words = new ObservableCollection<string>(foundWords.Values),
+                                    FoundWordIndex = foundWord.Key
+                                };
 
-                        _uiContext.Send(state =>
+                                _allSentenceResultVM.Add(sentenceVM);
+
+                                _uiContext.Send(state =>
+                                {
+                                    FilteredSentenceResultVM.Add(sentenceVM);
+                                }, null);
+
+                                ++TotalFound;
+                                ++foundWordIndex;
+                            }
+                        }
+                        else
                         {
-                            FilteredSentenceResultVM.Add(sentenceVM);
-                        }, null);
+                            var sentenceVM = new SentenceResultVM
+                            {
+                                Sentence = sentence,
+                                Id = TotalFound,
+                                Words = new ObservableCollection<string>(foundWords.Values)
+                            };
 
-                        ++TotalFound;
+                            _allSentenceResultVM.Add(sentenceVM);
+
+                            _uiContext.Send(state =>
+                            {
+                                FilteredSentenceResultVM.Add(sentenceVM);
+                            }, null);
+
+                            ++TotalFound;
+                        }
+
                     }
 
                     i++;
@@ -332,6 +364,8 @@ namespace ToraSearcher.UI.ViewModels
 
                 foreach (var sentence in sentencesList)
                 {
+                    var wordIndex = 0;
+
                     foreach (var word in sentence.Words)
                     {
                         if (word == null)
@@ -350,12 +384,16 @@ namespace ToraSearcher.UI.ViewModels
                                     Word = word,
                                     Id = TotalFound,
                                     IsWord = true,
-                                    FirstSentence = sentence
+                                    FirstSentence = sentence,
+                                    FoundWordIndex = wordIndex
                                 })
                                 , null);
 
                             ++TotalFound;
+                            
                         }
+
+                        ++wordIndex;
                     }
 
                     i++;
@@ -462,8 +500,7 @@ namespace ToraSearcher.UI.ViewModels
         {
             if (ignoreTextArr == null)
                 return (words, word) => false;
-
-            //return (words, word) => words.Where(x => x.Contains(word)).Any();
+            
             return (words, word) => words.Contains(word);
         }
 
