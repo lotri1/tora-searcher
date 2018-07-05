@@ -283,7 +283,7 @@ namespace ToraSearcher.UI.ViewModels
                                 {
                                     Sentence = sentence,
                                     Id = TotalFound,
-                                    Words = new ObservableCollection<string>(foundWords.Values),
+                                    Words = new ObservableCollection<string>(new[] { foundWord.Value }),
                                     FoundWordIndex = foundWord.Key
                                 };
 
@@ -390,7 +390,7 @@ namespace ToraSearcher.UI.ViewModels
                                 , null);
 
                             ++TotalFound;
-                            
+
                         }
 
                         ++wordIndex;
@@ -500,7 +500,7 @@ namespace ToraSearcher.UI.ViewModels
         {
             if (ignoreTextArr == null)
                 return (words, word) => false;
-            
+
             return (words, word) => words.Contains(word);
         }
 
