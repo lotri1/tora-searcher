@@ -106,9 +106,20 @@ namespace ToraSearcher.UI.ViewModels
         {
             get
             {
-                return FirstSentence == null ? "" : FirstSentence.Text;
+                if (FirstSentence == null)
+                    return "";
+
+                if (FirstSentence.Text != null)
+                    return FirstSentence.Text;
+
+                var leftIndex = FoundWordIndex - 5 < 0 ? 0 : FoundWordIndex - 5;
+                var count = FirstSentence.Words.Length - leftIndex > 10 ? 10 : FirstSentence.Words.Length - leftIndex;
+
+                return string.Join(" ", FirstSentence.Words, leftIndex, count);
             }
         }
+
+        public int FoundWordIndex { get; set; }
 
         private readonly ObservableCollection<string> _highlightedWords = new ObservableCollection<string>();
         public ObservableCollection<string> HighlightedWords

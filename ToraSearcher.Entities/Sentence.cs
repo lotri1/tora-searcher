@@ -8,6 +8,8 @@ namespace ToraSearcher.Entities
 {
     public class Sentence
     {
+        public int Id { get; set; }
+
         public string BookName { get; set; }
 
         public string ChapterName { get; set; }

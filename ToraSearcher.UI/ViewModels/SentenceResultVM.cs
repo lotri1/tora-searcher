@@ -37,5 +37,21 @@ namespace ToraSearcher.UI.ViewModels
                 RaisePropertyChanged(() => Id);
             }
         }
+
+        public int FoundWordIndex { get; set; }
+
+        public string Text
+        {
+            get
+            {
+                if (Sentence.Text != null)
+                    return Sentence.Text;
+
+                var leftIndex = FoundWordIndex - 5 < 0 ? 0 : FoundWordIndex - 5;
+                var count = Sentence.Words.Length - leftIndex > 10 ? 10 : Sentence.Words.Length - leftIndex;
+
+                return string.Join(" ", Sentence.Words, leftIndex, count);
+            }
+        }
     }
 }

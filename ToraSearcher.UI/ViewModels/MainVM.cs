@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using ToraSearcher.Entities;
 
 namespace ToraSearcher.UI.ViewModels
@@ -29,6 +30,7 @@ namespace ToraSearcher.UI.ViewModels
 
         public RelayCommand SearchCommand { get; private set; }
         public RelayCommand ClearCommand { get; private set; }
+        public RelayCommand LoadedCommand { get; private set; }
 
         private readonly List<SentenceResultVM> _allSentenceResultVM = new List<SentenceResultVM>();
         public ObservableCollection<SentenceResultVM> FilteredSentenceResultVM { get; } = new ObservableCollection<SentenceResultVM>();
@@ -40,6 +42,7 @@ namespace ToraSearcher.UI.ViewModels
         public ObservableCollection<BookTreeNodeVM> BooksTreeLeafsVM { get; } = new ObservableCollection<BookTreeNodeVM>();
 
         SynchronizationContext _uiContext = SynchronizationContext.Current;
+        private bool isLoaded = false;
 
         private string _searchText;
         public string SearchText
@@ -83,6 +86,21 @@ namespace ToraSearcher.UI.ViewModels
                 _progress = value;
 
                 RaisePropertyChanged(() => Progress);
+            }
+        }
+
+        private bool _progressIndeterminate;
+        public bool ProgressIndeterminate
+        {
+            get
+            {
+                return _progressIndeterminate;
+            }
+            set
+            {
+                _progressIndeterminate = value;
+
+                RaisePropertyChanged(() => ProgressIndeterminate);
             }
         }
 
@@ -202,15 +220,19 @@ namespace ToraSearcher.UI.ViewModels
             });
 
             ClearCommand = new RelayCommand(Clear);
-            SearchButtonEnabled = true;
-            SearchTextEnabled = true;
+            LoadedCommand = new RelayCommand(async () =>
+            {
+                if (isLoaded)
+                    return;
+
+                isLoaded = true;
+                await LoadBooksAsync();
+            });            
 
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
 
             ClearFoundWords();
-
-            LoadBooks();
         }
 
         private async void Search()
@@ -220,8 +242,7 @@ namespace ToraSearcher.UI.ViewModels
                 return;
             }
 
-            SearchButtonEnabled = false;
-            SearchTextEnabled = false;
+            ChangeEnableButtons(false);
 
             Progress = 0;
 
@@ -241,12 +262,13 @@ namespace ToraSearcher.UI.ViewModels
             await Task.Run(() =>
             {
                 var sentencesList = GetSentencesList();
-                var foundWords = new List<string>();
+                var foundWords = new Dictionary<int, string>();
                 var searchFunction = GetSearchFunction(SearchText, SearchType);
 
                 foreach (var sentence in sentencesList)
                 {
                     foundWords.Clear();
+                    var wordsIndex = 0;
 
                     foreach (var word in sentence.Words)
                     {
@@ -263,28 +285,59 @@ namespace ToraSearcher.UI.ViewModels
 
                         if (searchFunction(word))
                         {
-                            foundWords.Add(word);
+                            foundWords.Add(wordsIndex, word);
                             wordsFound.Add(word);
                         }
+
+                        wordsIndex++;
                     }
 
                     if (foundWords.Count > 0)
                     {
-                        var sentenceVM = new SentenceResultVM
+                        if (sentence.Text == null)
                         {
-                            Sentence = sentence,
-                            Id = TotalFound,
-                            Words = new ObservableCollection<string>(foundWords)
-                        };
+                            int foundWordIndex = 0;
 
-                        _allSentenceResultVM.Add(sentenceVM);
+                            foreach (var foundWord in foundWords)
+                            {
+                                var sentenceVM = new SentenceResultVM
+                                {
+                                    Sentence = sentence,
+                                    Id = TotalFound,
+                                    Words = new ObservableCollection<string>(new[] { foundWord.Value }),
+                                    FoundWordIndex = foundWord.Key
+                                };
 
-                        _uiContext.Send(state =>
+                                _allSentenceResultVM.Add(sentenceVM);
+
+                                _uiContext.Send(state =>
+                                {
+                                    FilteredSentenceResultVM.Add(sentenceVM);
+                                }, null);
+
+                                ++TotalFound;
+                                ++foundWordIndex;
+                            }
+                        }
+                        else
                         {
-                            FilteredSentenceResultVM.Add(sentenceVM);
-                        }, null);
+                            var sentenceVM = new SentenceResultVM
+                            {
+                                Sentence = sentence,
+                                Id = TotalFound,
+                                Words = new ObservableCollection<string>(foundWords.Values)
+                            };
 
-                        ++TotalFound;
+                            _allSentenceResultVM.Add(sentenceVM);
+
+                            _uiContext.Send(state =>
+                            {
+                                FilteredSentenceResultVM.Add(sentenceVM);
+                            }, null);
+
+                            ++TotalFound;
+                        }
+
                     }
 
                     i++;
@@ -296,11 +349,9 @@ namespace ToraSearcher.UI.ViewModels
 
                 --TotalFound;
 
-                SearchButtonEnabled = true;
-                SearchTextEnabled = true;
+                ChangeEnableButtons(true);
+
                 Progress = 0;
-
-
             });
 
             wordsFound.OrderBy(x => x).ToList().ForEach(WordsVM.Add);
@@ -313,8 +364,7 @@ namespace ToraSearcher.UI.ViewModels
                 return;
             }
 
-            SearchButtonEnabled = false;
-            SearchTextEnabled = false;
+            ChangeEnableButtons(false);
 
             Progress = 0;
             CombinationsResultVM.Clear();
@@ -332,6 +382,8 @@ namespace ToraSearcher.UI.ViewModels
 
                 foreach (var sentence in sentencesList)
                 {
+                    var wordIndex = 0;
+
                     foreach (var word in sentence.Words)
                     {
                         if (word == null)
@@ -350,12 +402,16 @@ namespace ToraSearcher.UI.ViewModels
                                     Word = word,
                                     Id = TotalFound,
                                     IsWord = true,
-                                    FirstSentence = sentence
+                                    FirstSentence = sentence,
+                                    FoundWordIndex = wordIndex
                                 })
                                 , null);
 
                             ++TotalFound;
+
                         }
+
+                        ++wordIndex;
                     }
 
                     i++;
@@ -379,8 +435,7 @@ namespace ToraSearcher.UI.ViewModels
                         , null);
                 }
 
-                SearchButtonEnabled = true;
-                SearchTextEnabled = true;
+                ChangeEnableButtons(true);
                 Progress = 0;
             });
         }
@@ -397,27 +452,35 @@ namespace ToraSearcher.UI.ViewModels
                     .ToList();
         }
 
-        private void LoadBooks()
+        private async Task LoadBooksAsync()
         {
-            using (var db = new LiteDatabase(@"tora-searcher.db"))
+            ProgressIndeterminate = true;
+
+            await Task.Run(() =>
             {
-                var col = db.GetCollection<Sentence>("sentences");
-                var booksCol = db.GetCollection<BookTreeNode>("books");
-
-                booksTree.AddRange(booksCol.FindAll());
-
-                foreach (var book in booksTree)
+                using (var db = new LiteDatabase(@"tora-searcher.db"))
                 {
-                    var bookVM = new BookTreeNodeVM
+                    var col = db.GetCollection<Sentence>("sentences");
+                    var booksCol = db.GetCollection<BookTreeNode>("books");
+
+                    booksTree.AddRange(booksCol.FindAll());
+
+                    foreach (var book in booksTree)
                     {
-                        BookNode = book
-                    };
+                        var bookVM = new BookTreeNodeVM
+                        {
+                            BookNode = book
+                        };
 
-                    BooksTreeVM.Add(bookVM);
+                        _uiContext.Send((obj) => BooksTreeVM.Add(bookVM), null);
+                    }
+
+                    LoadSentences(BooksTreeVM, col);
                 }
+            });
 
-                LoadSentences(BooksTreeVM, col);
-            }
+            ChangeEnableButtons(true);
+            ProgressIndeterminate = false;
         }
 
         private void LoadSentences(IEnumerable<BookTreeNodeVM> vmList, LiteCollection<Sentence> col)
@@ -463,7 +526,6 @@ namespace ToraSearcher.UI.ViewModels
             if (ignoreTextArr == null)
                 return (words, word) => false;
 
-            //return (words, word) => words.Where(x => x.Contains(word)).Any();
             return (words, word) => words.Contains(word);
         }
 
@@ -483,6 +545,12 @@ namespace ToraSearcher.UI.ViewModels
             WordsVM.Clear();
             WordsVM.Add("----הכל----");
             SelectedWord = WordsVM[0];
+        }
+
+        private void ChangeEnableButtons(bool enable)
+        {
+            SearchButtonEnabled = enable;
+            SearchTextEnabled = enable;
         }
     }
 }

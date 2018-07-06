@@ -8,6 +8,8 @@ namespace ToraSearcher.Entities
 {
     public class BookTreeNode
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public List<BookTreeNode> Books { get; set; }
