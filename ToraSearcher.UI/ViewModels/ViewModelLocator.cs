@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,14 @@ namespace ToraSearcher.UI.ViewModels
 {
     public class ViewModelLocator : ViewModelBase
     {
-        public MainVM MainVM { get; } = new MainVM();
+        public MainVM MainVM => ServiceLocator.Current.GetInstance<MainVM>();
+
+        static ViewModelLocator()
+        {
+            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+
+            SimpleIoc.Default.Register<MainVM>();
+        }
 
         public ViewModelLocator()
         {

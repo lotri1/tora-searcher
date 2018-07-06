@@ -11,11 +11,15 @@
         xmlns:adorners="http://gu.se/Adorners"
         xmlns:entities="clr-namespace:ToraSearcher.Entities;assembly=ToraSearcher.Entities"
         Title="בלבבי משכן אבנה" Height="350" Width="700"
-        FocusManager.FocusedElement="{Binding ElementName='searchTextBox'}" WindowState="Maximized">
-    <Window.Resources>
-        <vm:ViewModelLocator x:Key="locator"/>
-    </Window.Resources>
-    <Grid DataContext="{Binding Source={StaticResource locator}, Path=MainVM}">
+        FocusManager.FocusedElement="{Binding ElementName='searchTextBox'}" WindowState="Maximized" 
+        DataContext="{Binding Source={StaticResource locator}, Path=MainVM}" 
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="43"/>
             <ColumnDefinition/>
@@ -38,7 +42,7 @@
                 <ColumnDefinition Width="145"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ProgressBar Margin="5" Value="{Binding Progress}" FlowDirection="RightToLeft" Grid.ColumnSpan="1"/>
+            <ProgressBar Margin="5" Value="{Binding Progress}" FlowDirection="RightToLeft" Grid.ColumnSpan="1" IsIndeterminate="{Binding ProgressIndeterminate}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,5" FlowDirection="RightToLeft">
                 <Button Content="חיפוש"   FlowDirection="RightToLeft" Command="{Binding SearchCommand, Mode=OneWay}" IsEnabled="{Binding SearchButtonEnabled}" Margin="5,0,0,0" Width="40"/>
                 <Button Content="נקה" Margin="5,0,0,0" Width="40"  Command="{Binding ClearCommand, Mode=OneWay}"/>

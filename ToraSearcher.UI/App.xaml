@@ -4,10 +4,12 @@
              xmlns:local="clr-namespace:ToraSearcher.UI"
              xmlns:converters="clr-namespace:ToraSearcher.UI.Converters"
              xmlns:properties="clr-namespace:ToraSearcher.UI.Properties"
-             StartupUri="MainWindow.xaml" Exit="Application_Exit">
+             StartupUri="MainWindow.xaml" Exit="Application_Exit"
+             xmlns:vm="clr-namespace:ToraSearcher.UI.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
             <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <vm:ViewModelLocator x:Key="locator"></vm:ViewModelLocator>
             <properties:Settings x:Key="Settings" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="TemplatesResources.xaml"/>
