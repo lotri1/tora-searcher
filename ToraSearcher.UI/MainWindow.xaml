@@ -75,7 +75,26 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Grid Grid.Column="1" Width="120">
+            <ListView  Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleCombinationsGrid}" ItemsSource="{Binding CombinationsResultVM}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />
+                        <GridViewColumn Header="מילה" Width="100" DisplayMemberBinding="{Binding Word}" />
+                        <GridViewColumn Header="ספר" Width="120" DisplayMemberBinding="{Binding FirstSentenceBookName}" />
+                        <GridViewColumn Header="פרק" Width="160" DisplayMemberBinding="{Binding FirstSentenceChapterName}" />
+                        <GridViewColumn Header="פסוק / דף" Width="60" DisplayMemberBinding="{Binding FirstSentenceSentenceName}" />
+                        <GridViewColumn Width="60">
+                            <GridViewColumnHeader Content="" />
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:HighlightTextBlock Text="{Binding FirstSentenceText}" HighlightPhrases="{Binding HighlightedWords}" HighlightBrush="Cyan" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Column="1" Width="120" Visibility="{Binding IsVisibleSearchGrid}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="22"/>
                     <RowDefinition/>
@@ -115,25 +134,6 @@
 
             </Expander>
         </Grid>
-        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleCombinationsGrid}" ItemsSource="{Binding CombinationsResultVM}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding IdDisplay}" />
-                    <GridViewColumn Header="מילה" Width="100" DisplayMemberBinding="{Binding Word}" />
-                    <GridViewColumn Header="ספר" Width="120" DisplayMemberBinding="{Binding FirstSentenceBookName}" />
-                    <GridViewColumn Header="פרק" Width="160" DisplayMemberBinding="{Binding FirstSentenceChapterName}" />
-                    <GridViewColumn Header="פסוק / דף" Width="60" DisplayMemberBinding="{Binding FirstSentenceSentenceName}" />
-                    <GridViewColumn Width="60">
-                        <GridViewColumnHeader Content="" />
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <controls:HighlightTextBlock Text="{Binding FirstSentenceText}" HighlightPhrases="{Binding HighlightedWords}" HighlightBrush="Cyan" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
         <StackPanel Grid.Column="3" Orientation="Horizontal" Grid.Row="3" FlowDirection="RightToLeft" Grid.ColumnSpan="3">
             <Label x:Name="label" Content="סה&quot;כ פסוקים:" HorizontalAlignment="Right" FlowDirection="RightToLeft" Padding="5,5,0,5"/>
             <Label x:Name="label1" Content="{Binding TotalFound}" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
