@@ -98,6 +98,41 @@
     <Content Include="books\GmaraBavli\02_Bav SHABAT_L1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="books\GmaraBavli\03_Bav ERUVIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\04_Bav PSAHIM_L1.txt" />
+    <Resource Include="books\GmaraBavli\06_Bav ROSH HASHANA_L1.txt" />
+    <Resource Include="books\GmaraBavli\07_Bav YOMA_L1.txt" />
+    <Resource Include="books\GmaraBavli\08_Bav SUCA_L1.txt" />
+    <Resource Include="books\GmaraBavli\09_Bav BEITSA_L1.txt" />
+    <Resource Include="books\GmaraBavli\10_Bav TAANIT_L1.txt" />
+    <Resource Include="books\GmaraBavli\11_Bav MEGILA_L1.txt" />
+    <Resource Include="books\GmaraBavli\12_Bav MOED KATAN_L1.txt" />
+    <Resource Include="books\GmaraBavli\13_Bav HAGIGA_L1.txt" />
+    <Resource Include="books\GmaraBavli\14_Bav YEVAMOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\15_Bav KTUBOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\16_Bav NEDARIM_L1.txt" />
+    <Resource Include="books\GmaraBavli\17_Bav NAZIR_L1.txt" />
+    <Resource Include="books\GmaraBavli\18_Bav SOTA_L1.txt" />
+    <Resource Include="books\GmaraBavli\19_Bav GITIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\20_Bav KIDUSHIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\21_Bav BABA KAMA_L1.txt" />
+    <Resource Include="books\GmaraBavli\22_Bav BABA METSIA_L1.txt" />
+    <Resource Include="books\GmaraBavli\23_Bav BABA BATRA_L1.txt" />
+    <Resource Include="books\GmaraBavli\24_Bav SANHEDRIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\25_Bav MAKOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\26_Bav SHVUOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\27_Bav AVODA ZARA_L1.txt" />
+    <Resource Include="books\GmaraBavli\28_Bav HORAYOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\30_Bav ZVAHIM_L1.txt" />
+    <Resource Include="books\GmaraBavli\31_Bav MENAHOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\32_Bav HULIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\33_Bav BECHOROT_L1.txt" />
+    <Resource Include="books\GmaraBavli\34_Bav ARACHIN_L1.txt" />
+    <Resource Include="books\GmaraBavli\35_Bav TMURA_L1.txt" />
+    <Resource Include="books\GmaraBavli\36_Bav KRETOT_L1.txt" />
+    <Resource Include="books\GmaraBavli\37_Bav MEIILA_L1.txt" />
+    <Resource Include="books\GmaraBavli\38_BAV TAMID_L1.txt" />
+    <Resource Include="books\GmaraBavli\39_Bav Nida_L1.txt" />
     <Content Include="books\Tanach\Ktuvim\b27_Psalms.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
