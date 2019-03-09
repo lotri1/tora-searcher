@@ -42,7 +42,10 @@
                 <ColumnDefinition Width="145"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ProgressBar Margin="5" Value="{Binding Progress}" FlowDirection="RightToLeft" Grid.ColumnSpan="1" IsIndeterminate="{Binding ProgressIndeterminate}"/>
+            <Grid Margin="5">
+                <ProgressBar Value="{Binding Progress}" FlowDirection="RightToLeft" Grid.ColumnSpan="1" IsIndeterminate="{Binding ProgressIndeterminate}"/>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText}"/>
+            </Grid>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,5" FlowDirection="RightToLeft">
                 <Button Content="חיפוש"   FlowDirection="RightToLeft" Command="{Binding SearchCommand, Mode=OneWay}" IsEnabled="{Binding SearchButtonEnabled}" Margin="5,0,0,0" Width="40"/>
                 <Button Content="נקה" Margin="5,0,0,0" Width="40"  Command="{Binding ClearCommand, Mode=OneWay}"/>

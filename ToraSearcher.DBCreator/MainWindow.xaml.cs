@@ -53,13 +53,27 @@ namespace ToraSearcher.DBCreator
                     col.Insert(sentences);
                 }
 
-                string[] gmaraFiles = Directory.GetFiles(@"books\gmaraBavli", "*.txt", SearchOption.AllDirectories);
+                var gmaraFiles = Directory.GetFiles(@"books\gmaraBavli", "*.txt", SearchOption.AllDirectories);
 
                 foreach (var file in gmaraFiles)
                 {
                     var sentences = GetGmaraSentences(file);
                     col.Insert(sentences);
+
+                    sentences = GetGmaraSentences(file);
+
+                    var fileInfo = new FileInfo(file);
+                    var fileName = fileInfo.Name;
+
+                    using (FileStream fs = File.Create($"..\\..\\..\\books-for-review\\books-log\\books_log_{fileName}"))
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine($"{fileName}\r\n");
+                        //{ string.Join(" ", sentence.Words)}
+                        sw.Write(sentences.Aggregate("", (str, sentence) => $"{str}{sentence.ChapterName}, {sentence.SentenceName}\r\n"));
+                    }
                 }
+
 
                 var booksCol = db.GetCollection<BookTreeNode>("books");
 
@@ -192,7 +206,7 @@ namespace ToraSearcher.DBCreator
                         gmaraWord
                         .Matches(line)
                         .Cast<Match>()
-                        .Select(x => x.Groups[1].Value)
+                        .Select(x => x.Groups[1].Value.Replace("''", "\""))
                         .ToArray();
 
                     if (createNewSentence)

@@ -89,6 +89,21 @@ namespace ToraSearcher.UI.ViewModels
             }
         }
 
+        private string _progressText;
+        public string ProgressText
+        {
+            get
+            {
+                return _progressText;
+            }
+            set
+            {
+                _progressText = value;
+
+                RaisePropertyChanged(() => ProgressText);
+            }
+        }
+
         private bool _progressIndeterminate;
         public bool ProgressIndeterminate
         {
@@ -227,7 +242,7 @@ namespace ToraSearcher.UI.ViewModels
 
                 isLoaded = true;
                 await LoadBooksAsync();
-            });            
+            });
 
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
@@ -454,7 +469,7 @@ namespace ToraSearcher.UI.ViewModels
 
         private async Task LoadBooksAsync()
         {
-            ProgressIndeterminate = true;
+            //ProgressIndeterminate = true;
 
             await Task.Run(() =>
             {
@@ -480,16 +495,18 @@ namespace ToraSearcher.UI.ViewModels
             });
 
             ChangeEnableButtons(true);
-            ProgressIndeterminate = false;
+            //ProgressIndeterminate = false;
         }
 
-        private void LoadSentences(IEnumerable<BookTreeNodeVM> vmList, LiteCollection<Sentence> col)
+        private int LoadSentences(IEnumerable<BookTreeNodeVM> vmList, LiteCollection<Sentence> col, int loadedSentenceCount = 0)
         {
+            float sentenceCount = col.Count();
+
             foreach (var item in vmList)
             {
                 if (item.Books.Count > 0)
                 {
-                    LoadSentences(item.Books, col);
+                    loadedSentenceCount = LoadSentences(item.Books, col, loadedSentenceCount);
 
                     continue;
                 }
@@ -497,11 +514,23 @@ namespace ToraSearcher.UI.ViewModels
                 var bookSentences = col.Find(x => x.BookName == item.BookName).ToList();
                 booksDict.Add(item.BookName, bookSentences);
 
+                loadedSentenceCount += bookSentences.Count;
+
                 if (item.Books.Count == 0)
                 {
                     BooksTreeLeafsVM.Add(item);
                 }
+
+                _uiContext.Send((obj) =>
+                {
+                    ProgressText = item.BookName;
+                    Progress = (int)(loadedSentenceCount / sentenceCount * 100);
+                }, null);
             }
+
+            //_uiContext.Send((obj) => ProgressText = "", null);
+
+            return loadedSentenceCount;
         }
 
         private Func<string, bool> GetSearchFunction(string searchText, SearchTypes searchType)
