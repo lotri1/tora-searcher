@@ -469,16 +469,19 @@ namespace ToraSearcher.UI.ViewModels
 
         private async Task LoadBooksAsync()
         {
-            //ProgressIndeterminate = true;
+            _uiContext.Send((obj) => { ProgressIndeterminate = true; ProgressText = "טוען ספרים"; }, null);
 
             await Task.Run(() =>
             {
                 using (var db = new LiteDatabase(@"tora-searcher.db"))
                 {
-                    var col = db.GetCollection<Sentence>("sentences");
+                    var sentencesCol = db.GetCollection<Sentence>("sentences");
                     var booksCol = db.GetCollection<BookTreeNode>("books");
 
-                    booksTree.AddRange(booksCol.FindAll());
+                    var sentences = sentencesCol.FindAll().ToList();
+                    var books = booksCol.FindAll().ToList();
+
+                    booksTree.AddRange(books);
 
                     foreach (var book in booksTree)
                     {
@@ -490,15 +493,16 @@ namespace ToraSearcher.UI.ViewModels
                         _uiContext.Send((obj) => BooksTreeVM.Add(bookVM), null);
                     }
 
-                    LoadSentences(BooksTreeVM, col);
+                    LoadSentences(BooksTreeVM, sentences);
+
+                    _uiContext.Send((obj) => ProgressText = "", null);
                 }
             });
 
             ChangeEnableButtons(true);
-            //ProgressIndeterminate = false;
         }
 
-        private int LoadSentences(IEnumerable<BookTreeNodeVM> vmList, LiteCollection<Sentence> col, int loadedSentenceCount = 0)
+        private int LoadSentences(IEnumerable<BookTreeNodeVM> vmList, IEnumerable<Sentence> col, int loadedSentenceCount = 0)
         {
             float sentenceCount = col.Count();
 
@@ -511,7 +515,7 @@ namespace ToraSearcher.UI.ViewModels
                     continue;
                 }
 
-                var bookSentences = col.Find(x => x.BookName == item.BookName).ToList();
+                var bookSentences = col.Where(x => x.BookName == item.BookName).ToList();
                 booksDict.Add(item.BookName, bookSentences);
 
                 loadedSentenceCount += bookSentences.Count;
@@ -523,12 +527,13 @@ namespace ToraSearcher.UI.ViewModels
 
                 _uiContext.Send((obj) =>
                 {
+                    ProgressIndeterminate = false;
                     ProgressText = item.BookName;
                     Progress = (int)(loadedSentenceCount / sentenceCount * 100);
                 }, null);
             }
 
-            //_uiContext.Send((obj) => ProgressText = "", null);
+            
 
             return loadedSentenceCount;
         }
