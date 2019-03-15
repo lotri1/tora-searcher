@@ -47,8 +47,9 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText}"/>
             </Grid>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,5" FlowDirection="RightToLeft">
-                <Button Content="חיפוש"   FlowDirection="RightToLeft" Command="{Binding SearchCommand, Mode=OneWay}" IsEnabled="{Binding SearchButtonEnabled}" Margin="5,0,0,0" Width="40"/>
-                <Button Content="נקה" Margin="5,0,0,0" Width="40"  Command="{Binding ClearCommand, Mode=OneWay}"/>
+                <Button Content="חיפוש" FlowDirection="RightToLeft" Command="{Binding SearchCommand, Mode=OneWay}" IsEnabled="{Binding SearchButtonEnabled}" Margin="5,0,0,0" Width="40"/>
+                <Button Content="עצור" FlowDirection="RightToLeft" Command="{Binding StopCommand, Mode=OneWay}" IsEnabled="{Binding StopButtonEnabled}" Margin="5,0,0,0" Width="40"/>
+                <Button Content="נקה" Margin="5,0,0,0" Width="40"  Command="{Binding ClearCommand, Mode=OneWay}" IsEnabled="{Binding CleanButtonEnabled}" />
             </StackPanel>
             <TextBox x:Name="searchTextBox" Grid.Column="3" TextWrapping="Wrap" FlowDirection="RightToLeft" Margin="0,5,5,5" Text="{Binding SearchText}" IsEnabled="{Binding SearchTextEnabled}" InputLanguageManager.InputLanguage="he-IL" adorners:Watermark.Text="מילת חיפוש"/>
             <TextBox x:Name="textBox"  FlowDirection="RightToLeft"  Grid.Column="2" Margin="0,5,5,5" TextWrapping="Wrap" adorners:Watermark.Text="מילים להתעלמות"  Text="{Binding IgnoreText}"/>

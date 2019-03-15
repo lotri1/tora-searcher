@@ -25,10 +25,12 @@ namespace ToraSearcher.UI.ViewModels
 
     public class MainVM : ViewModelBase
     {
-        Dictionary<string, List<Sentence>> booksDict = new Dictionary<string, List<Sentence>>();
+        private Dictionary<string, List<Sentence>> booksDict = new Dictionary<string, List<Sentence>>();
         private readonly List<BookTreeNode> booksTree = new List<BookTreeNode>();
+        private bool _searchStopped;
 
         public RelayCommand SearchCommand { get; private set; }
+        public RelayCommand StopCommand { get; private set; }
         public RelayCommand ClearCommand { get; private set; }
         public RelayCommand LoadedCommand { get; private set; }
 
@@ -165,6 +167,34 @@ namespace ToraSearcher.UI.ViewModels
             }
         }
 
+        private bool _stopButtonEnabled;
+        public bool StopButtonEnabled
+        {
+            get
+            {
+                return _stopButtonEnabled;
+            }
+            set
+            {
+                _stopButtonEnabled = value;
+                RaisePropertyChanged(() => StopButtonEnabled);
+            }
+        }
+
+        private bool _cleanButtonEnabled;
+        public bool CleanButtonEnabled
+        {
+            get
+            {
+                return _cleanButtonEnabled;
+            }
+            set
+            {
+                _cleanButtonEnabled = value;
+                RaisePropertyChanged(() => CleanButtonEnabled);
+            }
+        }
+
         private bool _searchTextEnabled;
         public bool SearchTextEnabled
         {
@@ -227,11 +257,18 @@ namespace ToraSearcher.UI.ViewModels
         {
             SearchCommand = new RelayCommand(() =>
             {
+                _searchStopped = false;
+
                 if (SearchType == SearchTypes.Combinations)
                     GenerateCombinations();
 
                 else
                     Search();
+            });
+
+            StopCommand = new RelayCommand(() =>
+            {
+                _searchStopped = true;
             });
 
             ClearCommand = new RelayCommand(Clear);
@@ -282,6 +319,9 @@ namespace ToraSearcher.UI.ViewModels
 
                 foreach (var sentence in sentencesList)
                 {
+                    if (_searchStopped)
+                        break;
+
                     foundWords.Clear();
                     var wordsIndex = 0;
 
@@ -397,6 +437,9 @@ namespace ToraSearcher.UI.ViewModels
 
                 foreach (var sentence in sentencesList)
                 {
+                    if (_searchStopped)
+                        break;
+
                     var wordIndex = 0;
 
                     foreach (var word in sentence.Words)
@@ -611,6 +654,8 @@ namespace ToraSearcher.UI.ViewModels
         {
             SearchButtonEnabled = enable;
             SearchTextEnabled = enable;
+            CleanButtonEnabled = enable;
+            StopButtonEnabled = !enable;
         }
     }
 }
