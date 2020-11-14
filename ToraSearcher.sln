@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.UI", "ToraSearcher.UI\ToraSearcher.UI.csproj", "{81791646-BA99-43E5-94B5-22CD6E5EEE0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.DBCreator", "ToraSearcher.DBCreator\ToraSearcher.DBCreator.csproj", "{A69C6B90-7FA0-4D40-86DE-03CFAA3FB9F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.Entities", "ToraSearcher.Entities\ToraSearcher.Entities.csproj", "{7E6B5B7F-4F38-4480-B5BB-E73D7418C371}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15FD48CB-B01D-4D8A-A0BA-64CEA2DE0EE6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
