@@ -64,6 +64,13 @@
             <ListView x:Name="listView" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft" ItemsSource="{Binding FilteredSentenceResultVM}" SizeChanged="listView_SizeChanged" Visibility="{Binding IsVisibleSearchGrid}">
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="#" Width="70" DisplayMemberBinding="{Binding Id}" />
                         <GridViewColumn Header="ספר" Width="120" DisplayMemberBinding="{Binding Sentence.BookName}" />
                         <GridViewColumn Header="פרק" Width="160" DisplayMemberBinding="{Binding Sentence.ChapterName}" />

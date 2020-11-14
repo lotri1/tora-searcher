@@ -11,10 +11,7 @@ namespace ToraSearcher.UI.ViewModels
         private ObservableCollection<string> _words;
         public ObservableCollection<string> Words
         {
-            get
-            {
-                return _words;
-            }
+            get => _words;
             set
             {
                 _words = value;
@@ -26,10 +23,7 @@ namespace ToraSearcher.UI.ViewModels
         private int _id;
         public int Id
         {
-            get
-            {
-                return _id;
-            }
+            get => _id;
             set
             {
                 _id = value;
@@ -51,6 +45,17 @@ namespace ToraSearcher.UI.ViewModels
                 var count = Sentence.Words.Length - leftIndex > 10 ? 10 : Sentence.Words.Length - leftIndex;
 
                 return string.Join(" ", Sentence.Words, leftIndex, count);
+            }
+        }
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
             }
         }
     }
