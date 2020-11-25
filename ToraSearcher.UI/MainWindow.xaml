@@ -21,7 +21,7 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="43"/>
+            <ColumnDefinition Width="129"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="201.667"/>
@@ -34,7 +34,7 @@
             <RowDefinition/>
             <RowDefinition Height="27"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Column="0" Grid.ColumnSpan="6" >
+        <Grid Grid.Column="0" Grid.ColumnSpan="5" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto" MinWidth="90"/>
@@ -145,12 +145,15 @@
 
             </Expander>
         </Grid>
-        <StackPanel Grid.Column="3" Orientation="Horizontal" Grid.Row="3" FlowDirection="RightToLeft" Grid.ColumnSpan="3">
+        <StackPanel Grid.Column="3" Orientation="Horizontal" Grid.Row="3" FlowDirection="RightToLeft" Grid.ColumnSpan="2">
             <Label x:Name="label" Content="סה&quot;כ פסוקים:" HorizontalAlignment="Right" FlowDirection="RightToLeft" Padding="5,5,0,5"/>
             <Label x:Name="label1" Content="{Binding TotalFound}" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
         </StackPanel>
-        <Button x:Name="button" Content="רישוי" Margin="5,3" Grid.Row="3" Grid.Column="0" Click="button_Click"/>
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1" Margin="0,5">
+        <StackPanel Margin="5,3" Orientation="Horizontal" Grid.Row="3">
+            <Button x:Name="button" Content="רישוי" Click="button_Click" Height="21"/>
+            <Button Content="ייצא לקובץ" Margin="10,0" Height="21" Command="{Binding ExportToWordCommand, Mode=OneWay}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1" Margin="0,5">
             <RadioButton Content="על הסדר ללא דילוגים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.OrderedNoJump}}" />
             <RadioButton Content="על הסדר בדילוגים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.OrderedJump}}"/>
             <RadioButton Content="ללא סדר" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.NotOrdered}}"/>

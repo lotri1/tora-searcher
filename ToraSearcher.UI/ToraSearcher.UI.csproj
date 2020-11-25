@@ -101,6 +101,8 @@
     </ApplicationDefinition>
     <Compile Include="Controls\HighlightTextBlock.cs" />
     <Compile Include="Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="FileExporters\IFileExporter.cs" />
+    <Compile Include="FileExporters\WordFileExporter.cs" />
     <Compile Include="ViewModels\BookTreeNodeVM.cs" />
     <Compile Include="ViewModels\CombinationsResultVM.cs" />
     <Compile Include="ViewModels\MainVM.cs" />

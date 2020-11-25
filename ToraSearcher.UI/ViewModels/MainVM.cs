@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ToraSearcher.Entities;
+using ToraSearcher.UI.FileExporters;
 
 namespace ToraSearcher.UI.ViewModels
 {
@@ -29,10 +30,11 @@ namespace ToraSearcher.UI.ViewModels
         private readonly List<BookTreeNode> booksTree = new List<BookTreeNode>();
         private bool _searchStopped;
 
-        public RelayCommand SearchCommand { get; private set; }
-        public RelayCommand StopCommand { get; private set; }
-        public RelayCommand ClearCommand { get; private set; }
-        public RelayCommand LoadedCommand { get; private set; }
+        public RelayCommand SearchCommand { get; }
+        public RelayCommand StopCommand { get; }
+        public RelayCommand ClearCommand { get; }
+        public RelayCommand LoadedCommand { get; }
+        public RelayCommand ExportToWordCommand { get; }
 
         private readonly List<SentenceResultVM> _allSentenceResultVM = new List<SentenceResultVM>();
         public ObservableCollection<SentenceResultVM> FilteredSentenceResultVM { get; } = new ObservableCollection<SentenceResultVM>();
@@ -281,10 +283,23 @@ namespace ToraSearcher.UI.ViewModels
                 await LoadDataAsync();
             });
 
+            ExportToWordCommand = new RelayCommand(ExportToWord);
+
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
 
             ClearFoundWords();
+        }
+
+        private void ExportToWord()
+        {
+            IFileExporter fileExporter = new WordFileExporter();
+
+            var selectedSentences =
+                _allSentenceResultVM
+                .Where(x => x.IsSelected);
+
+            fileExporter.ExportSentenceResults(selectedSentences);
         }
 
         private async void Search()
@@ -522,7 +537,7 @@ namespace ToraSearcher.UI.ViewModels
 
             await Task.Run(() =>
             {
-                List<BookTreeNode> books;               
+                List<BookTreeNode> books;
 
                 using (var db = new LiteDatabase(@"tora-searcher.db"))
                 {
