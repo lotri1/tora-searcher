@@ -21,7 +21,10 @@ namespace ToraSearcher.UI
                 actualWidth = actualWidth - gridView.Columns[i].ActualWidth;
             }
 
-            gridView.Columns[gridView.Columns.Count - 1].Width = actualWidth - 10;
+            if (actualWidth - 10 > 0)
+            {
+                gridView.Columns[gridView.Columns.Count - 1].Width = actualWidth - 10;
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
