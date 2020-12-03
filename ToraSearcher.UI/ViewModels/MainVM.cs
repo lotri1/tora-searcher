@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using ToraSearcher.Entities;
 using ToraSearcher.UI.FileExporters;
 
@@ -36,17 +35,27 @@ namespace ToraSearcher.UI.ViewModels
         public RelayCommand LoadedCommand { get; }
         public RelayCommand ExportToWordCommand { get; }
 
+        public RelayCommand SelectAllFilterWordsCommand { get; }
+
+        public RelayCommand RemoveAllFilterWordsCommand { get; }
+
         private readonly List<SentenceResultVM> _allSentenceResultVM = new List<SentenceResultVM>();
+
         public ObservableCollection<SentenceResultVM> FilteredSentenceResultVM { get; } = new ObservableCollection<SentenceResultVM>();
 
-        public ObservableCollection<string> WordsVM { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> WordsVM { get; } = new ObservableCollection<string>();
+
+        public ObservableCollection<string> SelectedWords { get; } = new ObservableCollection<string>();
+
         private readonly HashSet<string> wordsFound = new HashSet<string>();
         public ObservableCollection<CombinationsResultVM> CombinationsResultVM { get; } = new ObservableCollection<CombinationsResultVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeVM { get; } = new ObservableCollection<BookTreeNodeVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeLeafsVM { get; } = new ObservableCollection<BookTreeNodeVM>();
 
         SynchronizationContext _uiContext = SynchronizationContext.Current;
-        private bool isLoaded = false;
+
+        private bool _isLoaded = false;
+        private bool _isSearching = false;
 
         private string _searchText;
         public string SearchText
@@ -230,42 +239,42 @@ namespace ToraSearcher.UI.ViewModels
             }
         }
 
-        private string _selectedWord;
-        public string SelectedWord
-        {
-            get { return _selectedWord; }
-            set
-            {
-                if (value == _selectedWord)
-                    return;
+        //private ObservableCollection<string> _selectedWords = new ObservableCollection<string>();
+        //public ObservableCollection<string> SelectedWords
+        //{
+        //    get { return _selectedWords; }
+        //    set
+        //    {
+        //        if (value == _selectedWords)
+        //            return;
 
-                _selectedWord = value;
-                RaisePropertyChanged(() => SelectedWord);
+        //        _selectedWords = value;
+        //        RaisePropertyChanged(() => SelectedWords);
 
-                FilteredSentenceResultVM.Clear();
+        //        FilteredSentenceResultVM.Clear();
 
-                if (_selectedWord == "----הכל----")
-                {
-                    _allSentenceResultVM.ForEach(FilteredSentenceResultVM.Add);
-                }
-                else
-                {
-                    _allSentenceResultVM.Where(x => x.Words.Contains(_selectedWord)).ToList().ForEach(FilteredSentenceResultVM.Add);
-                }
-            }
-        }
+        //        if (_selectedWord[0] == "----הכל----")
+        //        {
+        //            //    _allSentenceResultVM.ForEach(FilteredSentenceResultVM.Add);
+        //        }
+        //        else
+        //        {
+        //            _allSentenceResultVM.Where(x => x.Words.Contains(_selectedWord)).ToList().ForEach(FilteredSentenceResultVM.Add);
+        //        }
+        //    }
+        //}
 
         public MainVM()
         {
-            SearchCommand = new RelayCommand(() =>
+            SearchCommand = new RelayCommand(async () =>
             {
                 _searchStopped = false;
 
                 if (SearchType == SearchTypes.Combinations)
-                    GenerateCombinations();
+                    await GenerateCombinations();
 
                 else
-                    Search();
+                    await Search();
             });
 
             StopCommand = new RelayCommand(() =>
@@ -276,19 +285,87 @@ namespace ToraSearcher.UI.ViewModels
             ClearCommand = new RelayCommand(Clear);
             LoadedCommand = new RelayCommand(async () =>
             {
-                if (isLoaded)
+                if (_isLoaded)
                     return;
 
-                isLoaded = true;
+                _isLoaded = true;
                 await LoadDataAsync();
             });
 
             ExportToWordCommand = new RelayCommand(ExportToWord);
 
+            SelectAllFilterWordsCommand = new RelayCommand(SelectAllFilterWords);
+            RemoveAllFilterWordsCommand = new RelayCommand(RemoveAllFilterWords);
+
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
 
+            SelectedWords.CollectionChanged += SelectedWords_CollectionChanged;
+
             ClearFoundWords();
+        }
+
+        //TODO: This method locks the ui - need to fix it.
+        private async void SelectedWords_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //if (SelectedWords.Any())
+            //{
+            //    Debug.WriteLine(SelectedWords.Aggregate((curr, next) => $"{next} {curr}"));
+            //}
+
+            //if (_isSearching)
+            //    return;
+
+            //FilteredSentenceResultVM.Clear();
+
+            //await Task.Run(() =>
+            //{
+            //    var selectedWordsDict = SelectedWords.ToLookup(x => x);
+
+            //    var filteredSentences =
+            //        _allSentenceResultVM
+            //        .Where(x => x.Words.Any(y => selectedWordsDict.Contains(y)));
+
+            //    //var tasks = new List<Task>();
+
+            //    foreach (var item in filteredSentences)
+            //    {
+            //        _uiContext.Send(state => FilteredSentenceResultVM.Add((SentenceResultVM)state), item);
+
+            //        //tasks.Add(t);                    
+            //    }
+
+            //    //Task.WaitAll(tasks.ToArray());
+            //});
+        }
+
+        public void FilterSentencesByWords()
+        {
+            FilteredSentenceResultVM.Clear();
+
+            //await Task.Run(() =>
+            //{
+            var selectedWordsDict = SelectedWords.ToLookup(x => x);
+
+            var filteredSentences =
+                _allSentenceResultVM
+                .Where(x => x.Words.Any(y => selectedWordsDict.Contains(y)));
+
+            //var tasks = new List<Task>();
+
+            _uiContext.Send(state =>
+            {
+                foreach (var item in filteredSentences)
+                {
+                    FilteredSentenceResultVM.Add((SentenceResultVM)item);
+                }
+            }, null);
+
+            //tasks.Add(t);                    
+
+
+            //Task.WaitAll(tasks.ToArray());
+            //});
         }
 
         private void ExportToWord()
@@ -302,7 +379,25 @@ namespace ToraSearcher.UI.ViewModels
             fileExporter.ExportSentenceResults(selectedSentences);
         }
 
-        private async void Search()
+        private void SelectAllFilterWords()
+        {
+            foreach (var word in WordsVM)
+            {
+                if (!SelectedWords.Contains(word))
+                    SelectedWords.Add(word);
+            }
+
+            FilterSentencesByWords();
+        }
+
+        private void RemoveAllFilterWords()
+        {
+            SelectedWords.Clear();
+
+            FilterSentencesByWords();
+        }
+
+        private async Task Search()
         {
             if (string.IsNullOrEmpty(SearchText))
             {
@@ -325,6 +420,7 @@ namespace ToraSearcher.UI.ViewModels
             var ignoreTextFunc = GetIgnoreTextFunction(ignoreTextArr);
             var i = 0;
             TotalFound = 1;
+            //_isSearching = true;
 
             await Task.Run(() =>
             {
@@ -424,10 +520,17 @@ namespace ToraSearcher.UI.ViewModels
                 Progress = 0;
             });
 
-            wordsFound.OrderBy(x => x).ToList().ForEach(WordsVM.Add);
+            foreach (var word in wordsFound.OrderBy(x => x))
+            {
+                WordsVM.Add(word);
+                SelectedWords.Add(word);
+            }
+
+            //FilterSentencesByWords();
+            //_isSearching = false;
         }
 
-        private async void GenerateCombinations()
+        private async Task GenerateCombinations()
         {
             if (string.IsNullOrEmpty(SearchText))
             {
@@ -661,8 +764,7 @@ namespace ToraSearcher.UI.ViewModels
         private void ClearFoundWords()
         {
             WordsVM.Clear();
-            WordsVM.Add("----הכל----");
-            SelectedWord = WordsVM[0];
+            SelectedWords.Clear();
         }
 
         private void ChangeEnableButtons(bool enable)

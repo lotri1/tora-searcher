@@ -110,11 +110,57 @@
                     <RowDefinition Height="22"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <ListBox Grid.Row="1" Style="{DynamicResource FoundWordsListBoxStyle}" ItemsSource="{Binding WordsVM}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedWord}" ItemContainerStyle="{DynamicResource FoundWordsListBoxItemStyle}">
+                <Border BorderThickness="0,0,0,1" BorderBrush="#FFD8D8D8">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource ListBox.Static.Background}" FlowDirection="RightToLeft">
+                        <TextBlock Margin="3,0,0,0" Padding="0,2,0,0" >                                
+                            <Hyperlink Command="{Binding SelectAllFilterWordsCommand}">בחר הכל
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Margin="10,0,0,0" Padding="0,2,0,0">                                
+                            <Hyperlink Command="{Binding RemoveAllFilterWordsCommand}">נקה בחירה
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+                <ListBox x:Name="wordsListBox" Grid.Row="1" Style="{DynamicResource FoundWordsListBoxStyle}" ItemsSource="{Binding WordsVM}" HorizontalContentAlignment="Stretch" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" SelectionMode="Multiple">
+                    <ListBox.Resources>
+                        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="Padding" Value="4,1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                                            </MultiTrigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                                <TextBlock Text="{Binding}"/>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"/>
+                                <TextBlock Text="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

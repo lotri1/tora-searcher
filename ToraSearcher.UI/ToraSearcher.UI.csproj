@@ -99,6 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Binders\SelectedItemsBinder.cs" />
     <Compile Include="Controls\HighlightTextBlock.cs" />
     <Compile Include="Converters\EnumToBooleanConverter.cs" />
     <Compile Include="FileExporters\IFileExporter.cs" />
