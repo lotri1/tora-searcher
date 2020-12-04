@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace ToraSearcher.UI.Binders
 {
@@ -13,7 +10,6 @@ namespace ToraSearcher.UI.Binders
         private ListBox _listBox;
         private IList _collection;
         private Action _collectionChanged;
-
 
         public SelectedItemsBinder(ListBox listView, IList collection, Action collectionChanged = null)
         {
@@ -54,9 +50,6 @@ namespace ToraSearcher.UI.Binders
 
         private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //SynchronizationContext.Current.Send(state =>
-            //{
-
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 _listBox.SelectedItems.Clear();
@@ -73,15 +66,12 @@ namespace ToraSearcher.UI.Binders
             {
                 _listBox.SelectedItems.Remove(item);
             }
-            //}, null);
 
             _collectionChanged?.Invoke();
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //SynchronizationContext.Current.Send(state =>
-            //{
             foreach (var item in e.AddedItems ?? new object[0])
             {
                 if (!_collection.Contains(item))
@@ -92,7 +82,6 @@ namespace ToraSearcher.UI.Binders
             {
                 _collection.Remove(item);
             }
-            //}, null);
         }
     }
 }

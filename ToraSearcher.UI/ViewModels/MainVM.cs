@@ -28,6 +28,9 @@ namespace ToraSearcher.UI.ViewModels
         private Dictionary<string, List<Sentence>> booksDict = new Dictionary<string, List<Sentence>>();
         private readonly List<BookTreeNode> booksTree = new List<BookTreeNode>();
         private bool _searchStopped;
+        private bool _isLoaded = false;
+        private bool _skipFilterSentences = false;
+        private readonly SynchronizationContext _uiContext = SynchronizationContext.Current;
 
         public RelayCommand SearchCommand { get; }
         public RelayCommand StopCommand { get; }
@@ -51,11 +54,6 @@ namespace ToraSearcher.UI.ViewModels
         public ObservableCollection<CombinationsResultVM> CombinationsResultVM { get; } = new ObservableCollection<CombinationsResultVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeVM { get; } = new ObservableCollection<BookTreeNodeVM>();
         public ObservableCollection<BookTreeNodeVM> BooksTreeLeafsVM { get; } = new ObservableCollection<BookTreeNodeVM>();
-
-        SynchronizationContext _uiContext = SynchronizationContext.Current;
-
-        private bool _isLoaded = false;
-        private bool _isSearching = false;
 
         private string _searchText;
         public string SearchText
@@ -207,6 +205,7 @@ namespace ToraSearcher.UI.ViewModels
         }
 
         private bool _searchTextEnabled;
+
         public bool SearchTextEnabled
         {
             get
@@ -238,31 +237,6 @@ namespace ToraSearcher.UI.ViewModels
                     ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-
-        //private ObservableCollection<string> _selectedWords = new ObservableCollection<string>();
-        //public ObservableCollection<string> SelectedWords
-        //{
-        //    get { return _selectedWords; }
-        //    set
-        //    {
-        //        if (value == _selectedWords)
-        //            return;
-
-        //        _selectedWords = value;
-        //        RaisePropertyChanged(() => SelectedWords);
-
-        //        FilteredSentenceResultVM.Clear();
-
-        //        if (_selectedWord[0] == "----הכל----")
-        //        {
-        //            //    _allSentenceResultVM.ForEach(FilteredSentenceResultVM.Add);
-        //        }
-        //        else
-        //        {
-        //            _allSentenceResultVM.Where(x => x.Words.Contains(_selectedWord)).ToList().ForEach(FilteredSentenceResultVM.Add);
-        //        }
-        //    }
-        //}
 
         public MainVM()
         {
@@ -300,58 +274,21 @@ namespace ToraSearcher.UI.ViewModels
             SearchText = Properties.Settings.Default.SearchText;
             IgnoreText = Properties.Settings.Default.IgnoreText;
 
-            SelectedWords.CollectionChanged += SelectedWords_CollectionChanged;
-
             ClearFoundWords();
-        }
-
-        //TODO: This method locks the ui - need to fix it.
-        private async void SelectedWords_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            //if (SelectedWords.Any())
-            //{
-            //    Debug.WriteLine(SelectedWords.Aggregate((curr, next) => $"{next} {curr}"));
-            //}
-
-            //if (_isSearching)
-            //    return;
-
-            //FilteredSentenceResultVM.Clear();
-
-            //await Task.Run(() =>
-            //{
-            //    var selectedWordsDict = SelectedWords.ToLookup(x => x);
-
-            //    var filteredSentences =
-            //        _allSentenceResultVM
-            //        .Where(x => x.Words.Any(y => selectedWordsDict.Contains(y)));
-
-            //    //var tasks = new List<Task>();
-
-            //    foreach (var item in filteredSentences)
-            //    {
-            //        _uiContext.Send(state => FilteredSentenceResultVM.Add((SentenceResultVM)state), item);
-
-            //        //tasks.Add(t);                    
-            //    }
-
-            //    //Task.WaitAll(tasks.ToArray());
-            //});
         }
 
         public void FilterSentencesByWords()
         {
+            if (_skipFilterSentences)
+                return;
+
             FilteredSentenceResultVM.Clear();
 
-            //await Task.Run(() =>
-            //{
             var selectedWordsDict = SelectedWords.ToLookup(x => x);
 
             var filteredSentences =
                 _allSentenceResultVM
                 .Where(x => x.Words.Any(y => selectedWordsDict.Contains(y)));
-
-            //var tasks = new List<Task>();
 
             _uiContext.Send(state =>
             {
@@ -360,12 +297,6 @@ namespace ToraSearcher.UI.ViewModels
                     FilteredSentenceResultVM.Add((SentenceResultVM)item);
                 }
             }, null);
-
-            //tasks.Add(t);                    
-
-
-            //Task.WaitAll(tasks.ToArray());
-            //});
         }
 
         private void ExportToWord()
@@ -381,18 +312,26 @@ namespace ToraSearcher.UI.ViewModels
 
         private void SelectAllFilterWords()
         {
+            _skipFilterSentences = true;
+
             foreach (var word in WordsVM)
             {
                 if (!SelectedWords.Contains(word))
                     SelectedWords.Add(word);
             }
 
+            _skipFilterSentences = false;
+
             FilterSentencesByWords();
         }
 
         private void RemoveAllFilterWords()
         {
+            _skipFilterSentences = true;
+
             SelectedWords.Clear();
+
+            _skipFilterSentences = false;
 
             FilterSentencesByWords();
         }
@@ -520,14 +459,15 @@ namespace ToraSearcher.UI.ViewModels
                 Progress = 0;
             });
 
+            _skipFilterSentences = true;
+
             foreach (var word in wordsFound.OrderBy(x => x))
             {
                 WordsVM.Add(word);
                 SelectedWords.Add(word);
             }
 
-            //FilterSentencesByWords();
-            //_isSearching = false;
+            _skipFilterSentences = false;
         }
 
         private async Task GenerateCombinations()
