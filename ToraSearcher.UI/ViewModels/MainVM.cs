@@ -307,7 +307,7 @@ namespace ToraSearcher.UI.ViewModels
                 _allSentenceResultVM
                 .Where(x => x.IsSelected);
 
-            fileExporter.ExportSentenceResults(selectedSentences);
+            fileExporter.ExportResults(selectedSentences, SelectedWords);
         }
 
         private void SelectAllFilterWords()

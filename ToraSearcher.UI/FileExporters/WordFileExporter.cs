@@ -9,7 +9,7 @@ namespace ToraSearcher.UI.FileExporters
 {
     public class WordFileExporter : IFileExporter
     {
-        public void ExportSentenceResults(IEnumerable<SentenceResultVM> sentenceResults)
+        public void ExportResults(IEnumerable<SentenceResultVM> sentenceResults, IEnumerable<string> selectedWords)
         {
             if (sentenceResults == null)
             {
@@ -22,31 +22,59 @@ namespace ToraSearcher.UI.FileExporters
                 document.InsertParagraph("בלבבי משכן אבנה").FontSize(15d).SpacingAfter(50d).Alignment = Alignment.center;
                 document.InsertParagraph("תוצאות חיפוש").FontSize(13d).SpacingAfter(50d).Alignment = Alignment.center;
 
-                var table = document.AddTable(sentenceResults.Count() + 1, 5);
+                document.InsertTable(GenerateWordsTable(document, selectedWords));
 
-                table.SetDirection(Direction.RightToLeft);
+                //var table = document.AddTable(sentenceResults.Count() + 1, 5);
 
-                int i = 0;
+                //table.SetDirection(Direction.RightToLeft);
 
-                table.Rows[i].Cells[0].Paragraphs[0].Append("ספר");
-                table.Rows[i].Cells[1].Paragraphs[0].Append("פרק");
-                table.Rows[i].Cells[2].Paragraphs[0].Append("פסוק");
-                table.Rows[i].Cells[3].Paragraphs[0].Append("");
+                //int i = 0;
 
-                foreach (var sentence in sentenceResults)
-                {
-                    i++;
+                //table.Rows[i].Cells[0].Paragraphs[0].Append("ספר");
+                //table.Rows[i].Cells[1].Paragraphs[0].Append("פרק");
+                //table.Rows[i].Cells[2].Paragraphs[0].Append("פסוק");
+                //table.Rows[i].Cells[3].Paragraphs[0].Append("");
 
-                    table.Rows[i].Cells[0].Paragraphs[0].Append(sentence.Sentence.BookName);
-                    table.Rows[i].Cells[1].Paragraphs[0].Append(sentence.Sentence.ChapterName);
-                    table.Rows[i].Cells[2].Paragraphs[0].Append(sentence.Sentence.SentenceName);
-                    table.Rows[i].Cells[3].Paragraphs[0].Append(sentence.Sentence.Text);
-                }
+                //foreach (var sentence in sentenceResults)
+                //{
+                //    i++;
 
-                document.InsertTable(table);
+                //    table.Rows[i].Cells[0].Paragraphs[0].Append(sentence.Sentence.BookName);
+                //    table.Rows[i].Cells[1].Paragraphs[0].Append(sentence.Sentence.ChapterName);
+                //    table.Rows[i].Cells[2].Paragraphs[0].Append(sentence.Sentence.SentenceName);
+                //    table.Rows[i].Cells[3].Paragraphs[0].Append(sentence.Sentence.Text);
+                //}
+
+                //document.InsertTable(table);
 
                 document.Save();
             }
+        }
+
+        private Table GenerateWordsTable(DocX document, IEnumerable<string> selectedWords)
+        {
+            var rowCount = (int)Math.Ceiling(selectedWords.Count() / 5.0);
+            var table = document.AddTable(rowCount, 5);
+
+            table.SetDirection(Direction.RightToLeft);
+
+            int row = 0;
+            int col = 0;
+
+            foreach (var word in selectedWords)
+            {
+                table.Rows[row].Cells[col].Paragraphs[0].Append(word);
+
+                col++;
+
+                if (col == 5)
+                {
+                    col = 0;
+                    row++;
+                }
+            }
+
+            return table;
         }
     }
 }

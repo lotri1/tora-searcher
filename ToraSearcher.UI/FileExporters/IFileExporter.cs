@@ -5,6 +5,6 @@ namespace ToraSearcher.UI.FileExporters
 {
     public interface IFileExporter
     {
-        void ExportSentenceResults(IEnumerable<SentenceResultVM> sentenceResults);
+        void ExportResults(IEnumerable<SentenceResultVM> sentenceResults, IEnumerable<string> selectedWords);
     }
 }
