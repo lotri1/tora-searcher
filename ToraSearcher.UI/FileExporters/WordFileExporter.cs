@@ -61,7 +61,7 @@ namespace ToraSearcher.UI.FileExporters
             int row = 0;
             int col = 0;
 
-            foreach (var word in selectedWords)
+            foreach (var word in GetEncodedWords(selectedWords))
             {
                 table.Rows[row].Cells[col].Paragraphs[0].Append(word);
 
@@ -75,6 +75,17 @@ namespace ToraSearcher.UI.FileExporters
             }
 
             return table;
+        }
+
+        private IEnumerable<string> GetEncodedWords(IEnumerable<string> words)
+        {
+            foreach (var word in words)
+            {
+                if (word.Contains("יהוה"))
+                    yield return word.Replace("יהוה", "י-ה-ו-ה");
+                else
+                    yield return word;
+            }
         }
     }
 }
