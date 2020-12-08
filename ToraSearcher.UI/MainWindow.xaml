@@ -194,7 +194,7 @@
         </StackPanel>
         <StackPanel Margin="5,3" Orientation="Horizontal" Grid.Row="3">
             <Button x:Name="button" Content="רישוי" Click="button_Click" Height="21"/>
-            <Button Content="ייצא לקובץ" Margin="10,0" Height="21" Command="{Binding ExportToWordCommand, Mode=OneWay}"/>
+            <Button x:Name="btnExport" Content="ייצא לקובץ" Margin="10,0" Height="21" Click="btnExport_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1" Margin="0,5">
             <RadioButton Content="על הסדר ללא דילוגים" Margin="10,0,0,0" IsChecked="{Binding Path=SearchType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:SearchTypes.OrderedNoJump}}" />

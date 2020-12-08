@@ -36,8 +36,6 @@ namespace ToraSearcher.UI.ViewModels
         public RelayCommand StopCommand { get; }
         public RelayCommand ClearCommand { get; }
         public RelayCommand LoadedCommand { get; }
-        public RelayCommand ExportToWordCommand { get; }
-
         public RelayCommand SelectAllFilterWordsCommand { get; }
 
         public RelayCommand RemoveAllFilterWordsCommand { get; }
@@ -266,8 +264,6 @@ namespace ToraSearcher.UI.ViewModels
                 await LoadDataAsync();
             });
 
-            ExportToWordCommand = new RelayCommand(ExportToWord);
-
             SelectAllFilterWordsCommand = new RelayCommand(SelectAllFilterWords);
             RemoveAllFilterWordsCommand = new RelayCommand(RemoveAllFilterWords);
 
@@ -299,7 +295,7 @@ namespace ToraSearcher.UI.ViewModels
             }, null);
         }
 
-        private void ExportToWord()
+        public void ExportToWord(string fileName)
         {
             IFileExporter fileExporter = new WordFileExporter();
 
@@ -307,7 +303,7 @@ namespace ToraSearcher.UI.ViewModels
                 _allSentenceResultVM
                 .Where(x => x.IsSelected);
 
-            fileExporter.ExportResults(selectedSentences, SelectedWords);
+            fileExporter.ExportResults(fileName, selectedSentences, SelectedWords);
         }
 
         private void SelectAllFilterWords()

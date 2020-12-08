@@ -9,14 +9,14 @@ namespace ToraSearcher.UI.FileExporters
 {
     public class WordFileExporter : IFileExporter
     {
-        public void ExportResults(IEnumerable<SentenceResultVM> sentenceResults, IEnumerable<string> selectedWords)
+        public void ExportResults(string fileName, IEnumerable<SentenceResultVM> sentenceResults, IEnumerable<string> selectedWords)
         {
             if (sentenceResults == null)
             {
                 throw new ArgumentNullException(nameof(sentenceResults));
             }
 
-            using (var document = DocX.Create(Environment.CurrentDirectory + @"\Sentences.docx"))
+            using (var document = DocX.Create(fileName))
             {
                 document.InsertParagraph("בס\"ד").FontSize(10d).SpacingAfter(20d).Alignment = Alignment.right;
                 document.InsertParagraph("בלבבי משכן אבנה").FontSize(15d).SpacingAfter(50d).Alignment = Alignment.center;
