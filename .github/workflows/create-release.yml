@@ -1,0 +1,35 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  release:
+
+jobs:
+  build:
+    runs-on: windows-latest 
+
+    steps:      
+      - name: Checkout Code
+        uses: actions/checkout@v2  
+      
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Run a one-line script
+        run: echo ${{ github.ref }}
+
+#       - name: Setup NuGet
+#         uses: NuGet/setup-nuget@v1.0.5
+      
+#       - name: Restore NuGet Packages
+#         run: nuget restore ToraSearcher.sln
+  
+#       - name: Build and Publish Web App
+#         run: msbuild ToraSearcher.sln /p:Configuration=Release
+      
+#       - name: Upload a Build Artifact
+#         uses: actions/upload-artifact@v2.2.1
+#         with:
+#             name: ToraSearcher
+#             path: ToraSearcher.UI\bin\Release\
