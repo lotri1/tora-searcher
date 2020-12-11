@@ -1,13 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.UI", "ToraSearcher.UI\ToraSearcher.UI.csproj", "{81791646-BA99-43E5-94B5-22CD6E5EEE0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.DBCreator", "ToraSearcher.DBCreator\ToraSearcher.DBCreator.csproj", "{A69C6B90-7FA0-4D40-86DE-03CFAA3FB9F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToraSearcher.Entities", "ToraSearcher.Entities\ToraSearcher.Entities.csproj", "{7E6B5B7F-4F38-4480-B5BB-E73D7418C371}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E0F1E1DA-8DDB-4FAB-A90B-4CB265AECA23}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{6A2C0C35-EF4F-430C-815E-13A7B97C36EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EAC49E45-0039-4FCE-86FB-43C7DB5342E1}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\create-release.yml = .github\workflows\create-release.yml
+		.github\workflows\main.yml = .github\workflows\main.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +40,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A2C0C35-EF4F-430C-815E-13A7B97C36EE} = {E0F1E1DA-8DDB-4FAB-A90B-4CB265AECA23}
+		{EAC49E45-0039-4FCE-86FB-43C7DB5342E1} = {6A2C0C35-EF4F-430C-815E-13A7B97C36EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42EC2DF3-73B2-4D00-904F-33B63D52BB3E}

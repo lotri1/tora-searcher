@@ -27,11 +27,11 @@ jobs:
       - name: Restore NuGet Packages
         run: nuget restore ToraSearcher.sln
   
-      - name: Build and Publish Web App
+      - name: Build and Publish
         run: msbuild ToraSearcher.sln /p:Configuration=Release
         
-      - name: Build project # This would actually build your project, using zip for an example artifact
-        run: zip ToraSearcher ToraSearcher.UI\bin\Release\ 
+      - name: Prepare zipped release package # This would actually build your project, using zip for an example artifact
+        run: Compress-Archive -Path ToraSearcher.UI\bin\Release\  -DestinationPath .\ToraSearcher.zip        
       
       - name: Create Release
         id: create_release
