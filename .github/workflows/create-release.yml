@@ -27,11 +27,11 @@ jobs:
       - name: Restore NuGet Packages
         run: nuget restore ToraSearcher.sln
   
-      - name: Build and Publish
+      - name: Build
         run: msbuild ToraSearcher.sln /p:Configuration=Release
         
-      - name: Prepare zipped release package # This would actually build your project, using zip for an example artifact
-        run: Compress-Archive -Path ToraSearcher.UI\bin\Release\  -DestinationPath .\ToraSearcher.zip        
+      - name: Zip release package
+        run: Compress-Archive -Path ToraSearcher.UI\bin\Release\*  -DestinationPath .\ToraSearcher.zip
       
       - name: Create Release
         id: create_release
@@ -52,5 +52,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ToraSearcher.zip
-          asset_name: ToraSearcher.zip
+          asset_name: ToraSearcher.${{ github.ref }}.zip
           asset_content_type: application/zip
