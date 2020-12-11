@@ -4,6 +4,7 @@ name: Release CI
 
 on:
   release:
+    types: [published]
 
 jobs:
   build:
