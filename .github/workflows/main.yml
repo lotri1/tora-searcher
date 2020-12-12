@@ -27,3 +27,9 @@ jobs:
   
       - name: Build and Publish Web App
         run: msbuild ToraSearcher.sln /p:Configuration=Release
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.1
+        with:
+            name: ToraSearcher
+            path: ToraSearcher.UI\bin\Release\
