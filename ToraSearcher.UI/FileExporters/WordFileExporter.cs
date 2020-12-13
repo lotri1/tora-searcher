@@ -24,28 +24,28 @@ namespace ToraSearcher.UI.FileExporters
 
                 document.InsertTable(GenerateWordsTable(document, selectedWords));
 
-                //var table = document.AddTable(sentenceResults.Count() + 1, 5);
+                    //var table = document.AddTable(sentenceResults.Count() + 1, 5);
 
-                //table.SetDirection(Direction.RightToLeft);
+                    //table.SetDirection(Direction.RightToLeft);
 
-                //int i = 0;
+                    //int i = 0;
 
-                //table.Rows[i].Cells[0].Paragraphs[0].Append("ספר");
-                //table.Rows[i].Cells[1].Paragraphs[0].Append("פרק");
-                //table.Rows[i].Cells[2].Paragraphs[0].Append("פסוק");
-                //table.Rows[i].Cells[3].Paragraphs[0].Append("");
+                    //table.Rows[i].Cells[0].Paragraphs[0].Append("ספר");
+                    //table.Rows[i].Cells[1].Paragraphs[0].Append("פרק");
+                    //table.Rows[i].Cells[2].Paragraphs[0].Append("פסוק");
+                    //table.Rows[i].Cells[3].Paragraphs[0].Append("");
 
-                //foreach (var sentence in sentenceResults)
-                //{
-                //    i++;
+                    //foreach (var sentence in sentenceResults)
+                    //{
+                    //    i++;
 
-                //    table.Rows[i].Cells[0].Paragraphs[0].Append(sentence.Sentence.BookName);
-                //    table.Rows[i].Cells[1].Paragraphs[0].Append(sentence.Sentence.ChapterName);
-                //    table.Rows[i].Cells[2].Paragraphs[0].Append(sentence.Sentence.SentenceName);
-                //    table.Rows[i].Cells[3].Paragraphs[0].Append(sentence.Sentence.Text);
-                //}
+                    //    table.Rows[i].Cells[0].Paragraphs[0].Append(sentence.Sentence.BookName);
+                    //    table.Rows[i].Cells[1].Paragraphs[0].Append(sentence.Sentence.ChapterName);
+                    //    table.Rows[i].Cells[2].Paragraphs[0].Append(sentence.Sentence.SentenceName);
+                    //    table.Rows[i].Cells[3].Paragraphs[0].Append(sentence.Sentence.Text);
+                    //}
 
-                //document.InsertTable(table);
+                    //document.InsertTable(table);
 
                 document.Save();
             }
